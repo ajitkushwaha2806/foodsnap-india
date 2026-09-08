@@ -1,5 +1,5 @@
 "use client";
-import { plans } from "@/constants";
+import { plans, services } from "@/constants";
 import { useUser } from "@/store/hooks/useUser";
 import { useSearchParams } from "next/navigation";
 import Pricing from "@/components/global/pricing";
@@ -17,12 +17,15 @@ function PricingContent() {
   useEffect(() => {
     if (planParam && autoCheckout && (user || isAuthenticated) && !hasTriggeredRef.current) {
       hasTriggeredRef.current = true;
-      const targetPlan = plans.find((p) => p.key === planParam) || planParam;
-      startCheckout(targetPlan);
+      const targetItem =
+        plans.find((p) => p.key === planParam) ||
+        services.find((s) => s.key === planParam) ||
+        planParam;
+      startCheckout(targetItem);
     }
   }, [planParam, autoCheckout, user, isAuthenticated, startCheckout]);
 
-  return <Pricing plans={plans} />;
+  return <Pricing plans={plans} services={services} />;
 }
 
 export default function PricingPage() {

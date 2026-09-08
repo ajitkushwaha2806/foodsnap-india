@@ -29,15 +29,19 @@ export function useRazorpayCheckout() {
   const [activePlanKey, setActivePlanKey] = useState(null);
 
   const startCheckout = useCallback(
-    async (plan) => {
+    async (plan, optionsParam = {}) => {
       const planKey = typeof plan === "string" ? plan : plan?.key;
       const planName = typeof plan === "object" ? plan.name : "Subscription Plan";
+      const tier = typeof plan === "object" ? plan.tier : optionsParam.tier;
+      const includeUploadAddon = Boolean(
+        typeof plan === "object" ? plan.includeUploadAddon : optionsParam.includeUploadAddon
+      );
 
       if (!user && !isAuthenticated) {
         promptLogin({
           actionName: "purchase this plan",
           message: "Please sign in first to subscribe to a plan.",
-          customRedirectPath: `/pricing?plan=${planKey}&autoCheckout=true`,
+          customRedirectPath: `/pricing?plan=${planKey}&includeUploadAddon=${includeUploadAddon}&autoCheckout=true`,
           duration: 4000,
         });
         return;
@@ -55,6 +59,8 @@ export function useRazorpayCheckout() {
         // 1. Create order on backend
         const orderRes = await apiClient.post("/api/payment/create-order", {
           planKey,
+          tier,
+          includeUploadAddon,
         });
 
         const { order_id, amount, currency, key_id } = orderRes.data;
@@ -64,12 +70,18 @@ export function useRazorpayCheckout() {
         }
 
         // 2. Configure and open Razorpay Standard Checkout Modal
+        const descriptionText = includeUploadAddon
+          ? `${planName} + Done-For-You Photo Upload Add-on`
+          : tier?.items
+          ? `${planName} (Up to ${tier.items} Items)`
+          : `${planName} - High-Res Food Photo Library`;
+
         const options = {
           key: key_id,
           amount,
           currency: currency || "INR",
           name: "FoodSnap India",
-          description: `${planName} - High-Res Food Photo Library`,
+          description: descriptionText,
           image: "/assets/logo-transparent.png",
           order_id,
           prefill: {
@@ -88,20 +100,37 @@ export function useRazorpayCheckout() {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
                 planKey,
+                tier,
+                includeUploadAddon,
               });
 
               if (verifyRes.data?.success) {
-                success(
-                  "Payment successful! Your plan and credits are now active.",
-                  5000,
-                  {
-                    action: {
-                      redirect: "/",
-                      buttonText: "Go to Home",
-                      autoRedirect: true,
-                    },
-                  }
-                );
+                if (verifyRes.data?.isService || verifyRes.data?.hasUploadAddon) {
+                  success(
+                    verifyRes.data?.message ||
+                      "Payment successful! Our team will contact you shortly to upload your photos to Zomato & Swiggy.",
+                    6000,
+                    {
+                      action: {
+                        redirect: "/support",
+                        buttonText: "View Support Request",
+                        autoRedirect: true,
+                      },
+                    }
+                  );
+                } else {
+                  success(
+                    "Payment successful! Your plan and credits are now active.",
+                    5000,
+                    {
+                      action: {
+                        redirect: "/",
+                        buttonText: "Go to Home",
+                        autoRedirect: true,
+                      },
+                    }
+                  );
+                }
                 await fetchUser?.();
               } else {
                 notifyError("Payment verification failed. Please contact support.");

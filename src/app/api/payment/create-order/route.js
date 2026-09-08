@@ -1,6 +1,6 @@
 import { getAuthUser } from "@/lib/jwt";
 import { NextResponse } from "next/server";
-import { plans, services } from "@/constants";
+import { plans, services, photoUploadPlans, fssaiPlans } from "@/constants";
 import { getRazorpayClient } from "@/lib/razorpay";
 
 export async function POST(request) {
@@ -18,16 +18,28 @@ export async function POST(request) {
     }
 
     const body = await request.json().catch(() => ({}));
-    const { planKey, customAmount } = body;
+    const { planKey, customAmount, tier, includeUploadAddon } = body;
 
     let targetItem = plans.find((p) => p.key === planKey);
     if (!targetItem) {
       targetItem = services.find((s) => s.key === planKey);
     }
+    if (!targetItem && Array.isArray(photoUploadPlans)) {
+      targetItem = photoUploadPlans.find((p) => p.key === planKey);
+    }
+    if (!targetItem && Array.isArray(fssaiPlans)) {
+      targetItem = fssaiPlans.find((p) => p.key === planKey);
+    }
 
     let amountInPaise;
     if (targetItem) {
-      const finalAmount = targetItem.discountedAmount || targetItem.amount || 499;
+      let finalAmount = targetItem.discountedAmount || targetItem.amount || 499;
+      if (tier && tier.amount && Number(tier.amount) > 0) {
+        finalAmount = Number(tier.amount);
+      }
+      if (includeUploadAddon) {
+        finalAmount += 1000;
+      }
       amountInPaise = Math.round(finalAmount * 100);
     } else if (customAmount && Number(customAmount) >= 1) {
       amountInPaise = Math.round(Number(customAmount) * 100);
@@ -55,6 +67,9 @@ export async function POST(request) {
       notes: {
         userId: authUser.userId,
         planKey: planKey || "custom",
+        tierLabel: tier ? tier.label || `${tier.items} items` : "",
+        tierAmount: tier ? String(tier.amount) : "",
+        includeUploadAddon: Boolean(includeUploadAddon),
       },
     });
 

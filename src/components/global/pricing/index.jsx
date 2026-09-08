@@ -1,9 +1,8 @@
-"use client";
 import React from "react";
 import PlansGrid from "./components/PlansGrid";
- import { plans as defaultPlans } from "./constants";
 import PricingHeader from "./components/PricingHeader";
 import PricingEmptyState from "./components/PricingEmptyState";
+import { plans as defaultPlans } from "./constants";
 
 export default function PricingSection({ plans = defaultPlans }) {
   const displayPlans = plans && plans.length > 0 ? plans : defaultPlans;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import { useUser } from "@/store/hooks/useUser";
-import { Compass, Sparkles, FolderDown, HelpCircle, ArrowRight } from "lucide-react";
+import { Compass, Sparkles, FolderDown, HelpCircle, ArrowRight, Rocket } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, SidebarSeparator } from "@/components/ui/sidebar";
 
 const navigationData = {
@@ -15,6 +15,11 @@ const navigationData = {
                     title: "Discover Images",
                     url: "/",
                     icon: Compass,
+                },
+                {
+                    title: "Growth Services",
+                    url: "/services",
+                    icon: Rocket,
                 },
                 {
                     title: "My Downloads",

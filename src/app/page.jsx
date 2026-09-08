@@ -7,6 +7,7 @@ import SearchBar from "@/components/search/search-bar";
 import ImageCard from "@/components/search/image-card";
 import { useSearchQuery } from "@/hooks/useSearchQuery";
 import EmptyState from "@/components/global/EmptyState";
+import ServiceBannerCarousel from "@/components/home/ServiceBannerCarousel";
 
 export default function Home() {
   const { query, searchTrigger } = useSearch();
@@ -41,6 +42,9 @@ export default function Home() {
     <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       <div className="space-y-4">
         <SearchBar />
+
+        {!query && <ServiceBannerCarousel />}
+
         {showResults && (
           <div className="flex items-center justify-between pt-2 text-xs sm:text-sm text-muted-foreground border-b border-border pb-3">
             <div>
