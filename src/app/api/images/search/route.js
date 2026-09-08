@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import ImageModel from "@/models/Image";
 import { NextResponse } from "next/server";
+import { encryptPayload } from "@/lib/crypto";
 import { getCache, setCache, generateSearchCacheKey, SEARCH_CACHE_TTL_SEC } from "@/lib/api/redis";
 
 const getFilterValue = (searchParams, key, type = "string") => {
@@ -73,12 +74,12 @@ export async function GET(request) {
 
         const cachedData = await getCache(cacheKey);
         if (cachedData) {
+            const encryptedPayload = await encryptPayload(cachedData);
             return NextResponse.json(
                 {
-                    ...cachedData,
-                    message: cachedData.message
-                        ? `${cachedData.message} (cached)`
-                        : "Images fetched successfully (cached)",
+                    success: true,
+                    isEncrypted: true,
+                    payload: encryptedPayload,
                 },
                 {
                     headers: {
@@ -304,11 +305,20 @@ export async function GET(request) {
         };
 
         await setCache(cacheKey, responsePayload, SEARCH_CACHE_TTL_SEC);
-        return NextResponse.json(responsePayload, {
-            headers: {
-                "X-Cache": "MISS",
+        const encryptedPayload = await encryptPayload(responsePayload);
+
+        return NextResponse.json(
+            {
+                success: true,
+                isEncrypted: true,
+                payload: encryptedPayload,
             },
-        });
+            {
+                headers: {
+                    "X-Cache": "MISS",
+                },
+            }
+        );
     } catch (error) {
         console.error("Food search error:", error);
         return NextResponse.json(

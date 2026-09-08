@@ -1,6 +1,7 @@
 "use client";
 import { apiClient } from "@/lib/api-client";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { decryptPayload } from "@/lib/crypto";
 
 const fetchSearch = async ({ queryKey, pageParam = 1 }) => {
   const [, { query, limit }] = queryKey;
@@ -13,7 +14,14 @@ const fetchSearch = async ({ queryKey, pageParam = 1 }) => {
     },
   });
 
-  const payload = res.data;
+  let payload = res.data;
+  if (payload?.isEncrypted && payload?.payload) {
+    const decrypted = await decryptPayload(payload.payload);
+    if (decrypted) {
+      payload = decrypted;
+    }
+  }
+
   return {
     results: payload.data || payload.results || [],
     pagination: payload.pagination || {
