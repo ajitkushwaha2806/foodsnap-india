@@ -57,7 +57,7 @@ function CreditsBanner() {
         : "Free Plan";
 
     return (
-        <div className="mx-3 my-2 p-3.5 rounded-md bg-slate-50 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs group-data-[collapsible=icon]:hidden">
+        <div className="mx-3 my-2 p-3.5 rounded-md bg-slate-50 border border-slate-200/80 shadow-xs group-data-[collapsible=icon]:hidden">
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
                     <div className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary">
@@ -93,13 +93,13 @@ export function AppSidebar({ ...props }) {
     return (
         <Sidebar
             collapsible="icon"
-            className="border-r border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950"
+            className="border-r border-slate-200/80 bg-white"
             {...props}
         >
-            <SidebarHeader className="p-3 border-b border-slate-100 dark:border-slate-900">
+            <SidebarHeader className="p-3 border-b border-slate-100">
                 <Link
                     href="/"
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition-colors"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-slate-100/70 transition-colors"
                 >
                     <div className="flex items-center gap-2 bg-primary group-data-[collapsible=icon]:hidden">
                         <img
@@ -120,7 +120,7 @@ export function AppSidebar({ ...props }) {
                 <SidebarSeparator className="my-1 opacity-60" />
             </div>
 
-            <SidebarFooter className="p-2 border-t border-slate-100 dark:border-slate-900">
+            <SidebarFooter className="p-2 border-t border-slate-100">
                 <NavUser />
             </SidebarFooter>
 

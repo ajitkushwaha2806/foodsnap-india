@@ -118,19 +118,19 @@ export default function DownloadsPage() {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="p-6 bg-gradient-to-b from-gray-50/50 to-white dark:from-zinc-950/50 dark:to-zinc-900 min-h-screen"
+      className="p-6 bg-slate-50/50 min-h-screen"
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">
               Downloads
             </h1>
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
               {pagination?.totalCount || 0}
             </span>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-gray-500 mt-1">
             View and manage all your downloaded high-resolution food images.
           </p>
         </div>
@@ -139,7 +139,7 @@ export default function DownloadsPage() {
           onClick={() => refetch()}
           variant="outline"
           disabled={loading}
-          className="flex items-center gap-2 rounded-md border-gray-200 dark:border-gray-800 shadow-xs cursor-pointer w-fit"
+          className="flex items-center gap-2 rounded-md border-gray-200 shadow-xs cursor-pointer w-fit"
         >
           <RefreshCcw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           <span>{loading ? "Refreshing..." : "Refresh"}</span>
@@ -151,7 +151,7 @@ export default function DownloadsPage() {
           <LoadingSkeleton />
         ) : downloads.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gray-100 dark:bg-zinc-800">
+            <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gray-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="w-10 h-10 text-gray-400"
@@ -166,11 +166,11 @@ export default function DownloadsPage() {
               </svg>
             </div>
 
-            <h2 className="mt-6 text-xl font-semibold text-gray-800 dark:text-gray-200">
+            <h2 className="mt-6 text-xl font-semibold text-gray-800">
               No Downloads Yet
             </h2>
 
-            <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm max-w-sm">
+            <p className="mt-2 text-gray-500 text-sm max-w-sm">
               Looks like you haven&apos;t downloaded any images yet. Explore our curated food library and start downloading!
             </p>
 
@@ -198,8 +198,8 @@ export default function DownloadsPage() {
       </div>
 
       {pagination?.totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-4 border-t border-gray-100 dark:border-gray-800">
-          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-4 border-t border-gray-200">
+          <p className="text-xs sm:text-sm text-gray-500">
             Page {page} of {pagination.totalPages} ({pagination.totalCount} total downloaded)
           </p>
 

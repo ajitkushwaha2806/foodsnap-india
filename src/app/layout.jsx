@@ -16,8 +16,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={poppins.variable}>
-      <body className="font-sans antialiased">
+    <html lang="en" className={`light ${poppins.variable}`} style={{ colorScheme: "light" }}>
+      <body className="font-sans antialiased bg-background text-foreground">
         <AppShell>{children}</AppShell>
       </body>
     </html>

@@ -69,7 +69,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
   return (
     <TooltipProvider delayDuration={200}>
       <div className="cursor-pointer group">
-        <div className="overflow-hidden border rounded-md p-3 border-gray-200 dark:border-gray-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md transition-all">
+        <div className="overflow-hidden border rounded-md p-3 border-gray-200 bg-white shadow-sm hover:shadow-md transition-all">
           <div className="relative rounded-md overflow-hidden shadow-sm">
             {currentSrc && (
               <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
@@ -80,7 +80,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
                       size="icon"
                       disabled={isReporting}
                       onClick={reportImage}
-                      className="h-8 w-8 rounded-md bg-white/70 dark:bg-black/40 backdrop-blur-sm border border-white/40 dark:border-white/10 hover:bg-white dark:hover:bg-black/60 shadow-xs cursor-pointer"
+                      className="h-8 w-8 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200/80 hover:bg-white shadow-xs cursor-pointer"
                     >
                       {isReporting ? (
                         <Loader2
@@ -105,17 +105,17 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
                       size="icon"
                       disabled={isDownloading}
                       onClick={startDownload}
-                      className="h-8 w-8 rounded-md bg-white/70 dark:bg-black/40 backdrop-blur-sm border border-white/40 dark:border-white/10 hover:bg-white dark:hover:bg-black/60 shadow-xs cursor-pointer"
+                      className="h-8 w-8 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200/80 hover:bg-white shadow-xs cursor-pointer"
                     >
                       {isDownloading ? (
                         <Loader2
                           size={16}
-                          className="animate-spin text-gray-700 dark:text-gray-200"
+                          className="animate-spin text-gray-700"
                         />
                       ) : (
                         <Download
                           size={16}
-                          className="text-gray-700 dark:text-gray-200"
+                          className="text-gray-700"
                         />
                       )}
                     </Button>
@@ -135,7 +135,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
             )}
 
             {currentSrc && (
-              <div className="absolute bottom-2.5 right-2.5 rounded-md text-white px-2 py-0.5 text-[11px] font-medium bg-black/60 dark:bg-black/75 backdrop-blur-md z-10 flex items-center gap-1.5 border border-white/10 shadow-xs select-none">
+              <div className="absolute bottom-2.5 right-2.5 rounded-md text-white px-2 py-0.5 text-[11px] font-medium bg-black/60 backdrop-blur-md z-10 flex items-center gap-1.5 border border-white/10 shadow-xs select-none">
                 <span className="inline-block size-1.5 rounded-full bg-emerald-400"></span>
                 <span>Approved on Zomato &amp; Swiggy</span>
               </div>
@@ -153,7 +153,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
                 />
               </div>
             ) : (
-              <div className="w-full h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+              <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
                 <ImageIcon className="text-gray-400 w-8 h-8" />
               </div>
             )}
@@ -161,7 +161,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
 
           {displayTitle && (
             <p
-              className="mt-3 text-sm font-medium text-gray-700 dark:text-gray-300 truncate"
+              className="mt-3 text-sm font-medium text-gray-700 truncate"
               title={displayTitle}
             >
               {displayTitle}
