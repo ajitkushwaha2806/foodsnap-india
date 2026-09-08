@@ -24,7 +24,7 @@ export function TrendingChips({ activeTag, onSelectTag }) {
               "px-3 py-1.5 rounded-full text-xs font-medium shrink-0 transition-all duration-150 cursor-pointer border",
               isSelected
                 ? "bg-primary text-primary-foreground border-primary shadow-xs font-semibold scale-105"
-                : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-muted-foreground hover:text-foreground hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60"
+                : "bg-white border-slate-200 text-muted-foreground hover:text-foreground hover:border-slate-300 hover:bg-slate-50"
             )}
           >
             {tag}

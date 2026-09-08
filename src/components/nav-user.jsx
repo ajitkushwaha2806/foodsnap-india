@@ -49,7 +49,7 @@ export function NavUser() {
           <SidebarMenuButton
             asChild
             size="lg"
-            className="rounded-md border border-dashed border-slate-200 dark:border-slate-800 hover:bg-primary/5 hover:text-primary transition-all"
+            className="rounded-md border border-dashed border-slate-200 hover:bg-primary/5 hover:text-primary transition-all"
           >
             <Link href="/sign-in" className="flex items-center gap-3">
               <div className="flex size-8 items-center justify-center rounded-md bg-primary/10 text-primary">
@@ -73,20 +73,20 @@ export function NavUser() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="relative rounded-md transition-all duration-200 hover:bg-slate-100/90 dark:hover:bg-slate-800/80 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800 p-2"
+              className="relative rounded-md transition-all duration-200 hover:bg-slate-100/90 data-[state=open]:bg-slate-100 p-2"
             >
               {loading ? (
                 <div className="flex items-center gap-2.5 w-full animate-pulse">
-                  <div className="h-8 w-8 rounded-md bg-slate-200 dark:bg-slate-700 shrink-0" />
+                  <div className="h-8 w-8 rounded-md bg-slate-200 shrink-0" />
                   <div className="flex-1 space-y-1.5 group-data-[collapsible=icon]:hidden">
-                    <div className="h-3 w-20 rounded-md bg-slate-200 dark:bg-slate-700" />
-                    <div className="h-2.5 w-28 rounded-md bg-slate-100 dark:bg-slate-800" />
+                    <div className="h-3 w-20 rounded-md bg-slate-200" />
+                    <div className="h-2.5 w-28 rounded-md bg-slate-100" />
                   </div>
                 </div>
               ) : (
                 <>
                   <div className="relative shrink-0">
-                    <Avatar className="h-8 w-8 rounded-md border border-slate-200 dark:border-slate-700">
+                    <Avatar className="h-8 w-8 rounded-md border border-slate-200">
                       <AvatarImage
                         src={
                           user?.avatar
@@ -118,8 +118,8 @@ export function NavUser() {
                         className={cn(
                           "text-[9px] font-bold px-1.5 py-0.5 rounded-md tracking-wide uppercase",
                           isPro
-                            ? "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
-                            : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                            ? "bg-amber-100 text-amber-800"
+                            : "bg-slate-100 text-slate-600"
                         )}
                       >
                         {planDisplay}
@@ -137,14 +137,14 @@ export function NavUser() {
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-60 rounded-md p-1.5 shadow-xl border border-slate-200/80 dark:border-slate-800"
+            className="w-(--radix-dropdown-menu-trigger-width) min-w-60 rounded-md p-1.5 shadow-xl border border-slate-200/80 bg-white"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={8}
           >
             <DropdownMenuLabel className="p-2 font-normal">
               <div className="flex items-center gap-3 text-left">
-                <Avatar className="h-9 w-9 rounded-md border border-slate-200 dark:border-slate-700">
+                <Avatar className="h-9 w-9 rounded-md border border-slate-200">
                   <AvatarImage
                     src={
                       user?.avatar
@@ -170,10 +170,10 @@ export function NavUser() {
               </div>
 
               {/* Credits & Plan summary badge */}
-              <div className="mt-2.5 flex items-center justify-between rounded-md bg-slate-50 dark:bg-slate-900 px-2.5 py-1.5 border border-slate-100 dark:border-slate-800">
+              <div className="mt-2.5 flex items-center justify-between rounded-md bg-slate-50 px-2.5 py-1.5 border border-slate-100">
                 <div className="flex items-center gap-1.5">
                   <Zap className="size-3.5 text-amber-500 fill-amber-500" />
-                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                  <span className="text-xs font-medium text-slate-700">
                     Credits
                   </span>
                 </div>
@@ -187,19 +187,19 @@ export function NavUser() {
 
             <DropdownMenuGroup className="space-y-0.5">
               <Link href="/pricing">
-                <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium text-amber-600 dark:text-amber-400 focus:bg-amber-50 dark:focus:bg-amber-950/30">
+                <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium text-amber-600 focus:bg-amber-50">
                   <Sparkles className="size-4" />
                   <span>{isPro ? "Manage Plan" : "Upgrade to Pro"}</span>
                 </DropdownMenuItem>
               </Link>
               <Link href="/downloads">
-                <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium focus:bg-slate-100 dark:focus:bg-slate-800">
+                <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium focus:bg-slate-100">
                   <FolderDown className="size-4 text-muted-foreground" />
                   <span>My Downloads</span>
                 </DropdownMenuItem>
               </Link>
               <Link href="/support">
-                <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium focus:bg-slate-100 dark:focus:bg-slate-800">
+                <DropdownMenuItem className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium focus:bg-slate-100">
                   <HelpCircle className="size-4 text-muted-foreground" />
                   <span>Help & Support</span>
                 </DropdownMenuItem>
@@ -210,7 +210,7 @@ export function NavUser() {
 
             <DropdownMenuItem
               onClick={logoutUser}
-              className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950/30 focus:text-red-600"
+              className="cursor-pointer gap-2.5 rounded-md py-2 text-xs font-medium text-red-600 focus:bg-red-50 focus:text-red-600"
             >
               <LogOut className="size-4" />
               <span>Log out</span>

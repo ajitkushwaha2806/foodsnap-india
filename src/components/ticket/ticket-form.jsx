@@ -66,8 +66,8 @@ export default function TicketForm() {
       <Card className="w-full border border-border rounded-xl bg-card shadow-xs">
         <CardContent className="p-5 sm:p-7">
           {submittedSuccess && (
-            <div className="mb-5 p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 flex items-center gap-2.5 text-xs sm:text-sm">
-              <CheckCircle2 className="size-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <div className="mb-5 p-3.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center gap-2.5 text-xs sm:text-sm">
+              <CheckCircle2 className="size-5 shrink-0 text-emerald-600" />
               <span>Thank you! Your ticket has been received. Our team will get back to you shortly.</span>
             </div>
           )}

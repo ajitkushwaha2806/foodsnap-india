@@ -35,7 +35,7 @@ export function NavMain({ groups = [] }) {
                       "relative h-10 px-3 rounded-md font-medium transition-all duration-200 group/btn",
                       isActive
                         ? "bg-primary/10 text-primary font-semibold shadow-xs"
-                        : "text-muted-foreground hover:text-foreground hover:bg-slate-100/80 dark:hover:bg-slate-800/60"
+                        : "text-muted-foreground hover:text-foreground hover:bg-slate-100/80"
                     )}
                   >
                     <Link href={item.url} className="flex items-center gap-3 w-full">
