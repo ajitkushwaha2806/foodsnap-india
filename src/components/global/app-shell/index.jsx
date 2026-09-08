@@ -1,6 +1,7 @@
 "use client";
 import { store } from "@/store";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import posthog from "posthog-js";
 import { Provider } from "react-redux";
 import Notification from "../notification";
 import { usePathname } from "next/navigation";
@@ -8,6 +9,7 @@ import QueryProvider from "@/providers/QueryProvider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/ui/site-header";
 import { setupAxiosInterceptors } from "@/lib/auth-helpers";
+import { useUser } from "@/store/hooks/useUser";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function AppShell({ children }) {
@@ -44,6 +46,30 @@ export default function AppShell({ children }) {
 }
 
 function InnerAppShell({ isAuthPage, children }) {
+    const { user } = useUser();
+    const identifiedUserId = useRef(null);
+
+    useEffect(() => {
+        if (!user?._id) {
+            identifiedUserId.current = null;
+            return;
+        }
+
+        const userId = String(user._id);
+        if (identifiedUserId.current === userId) return;
+
+        if (identifiedUserId.current) {
+            posthog.reset();
+        }
+
+        posthog.identify(userId, {
+            ...(user.name && { name: user.name }),
+            ...(user.phone && { phone: user.phone }),
+            ...(user.subscription?.plan && { subscription_plan: user.subscription.plan }),
+        });
+        identifiedUserId.current = userId;
+    }, [user]);
+
     if (isAuthPage) {
         return <main className="min-h-screen w-full">{children}</main>;
     }

@@ -5,6 +5,7 @@ import { promptLogin, promptPricing } from "@/lib/auth-helpers";
 import { useUser } from "@/store/hooks/useUser";
 import { useNotification } from "@/store/hooks/useNotification";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import posthog from "posthog-js";
 
 export function useImage() {
   const queryClient = useQueryClient();
@@ -36,7 +37,11 @@ export function useImage() {
 
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
+      posthog.capture("image_downloaded", {
+        image_id: variables.imageId,
+        image_title: variables.title,
+      });
       success("Image downloaded successfully!");
       fetchUser?.();
     },
@@ -68,7 +73,8 @@ export function useImage() {
       const res = await apiClient.post("/api/images/report", { imageId });
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data, imageId) => {
+      posthog.capture("image_reported", { image_id: imageId });
       success("Image reported and removed from approved library.");
       queryClient.invalidateQueries({ queryKey: ["images_search"] });
     },

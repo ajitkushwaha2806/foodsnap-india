@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useUser } from "@/store/hooks/useUser";
 import { promptLogin } from "@/lib/auth-helpers";
 import { useNotification } from "@/store/hooks/useNotification";
+import posthog from "posthog-js";
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -105,6 +106,17 @@ export function useRazorpayCheckout() {
               });
 
               if (verifyRes.data?.success) {
+                posthog.capture("payment_completed", {
+                  plan_key: planKey,
+                  plan_name: planName,
+                  amount_paise: amount,
+                  currency: currency || "INR",
+                  include_upload_addon: includeUploadAddon,
+                  is_service: Boolean(verifyRes.data?.isService),
+                  has_upload_addon: Boolean(verifyRes.data?.hasUploadAddon),
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                });
                 if (verifyRes.data?.isService || verifyRes.data?.hasUploadAddon) {
                   success(
                     verifyRes.data?.message ||
@@ -153,8 +165,21 @@ export function useRazorpayCheckout() {
           },
         };
 
+        posthog.capture("checkout_started", {
+          plan_key: planKey,
+          plan_name: planName,
+          amount_paise: amount,
+          currency: currency || "INR",
+          include_upload_addon: includeUploadAddon,
+        });
+
         const rzp = new window.Razorpay(options);
         rzp.on("payment.failed", (failResponse) => {
+          posthog.capture("payment_failed", {
+            plan_key: planKey,
+            error_code: failResponse.error?.code,
+            error_reason: failResponse.error?.reason,
+          });
           notifyError(
             failResponse.error?.description || "Payment failed. Please try another method."
           );

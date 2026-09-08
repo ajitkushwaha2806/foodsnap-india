@@ -1,19 +1,22 @@
-const SECRET_KEY_SEED = process.env.PAYLOAD_CIPHER_KEY
+const KEY_SEED = process.env.NEXT_PUBLIC_PAYLOAD_CIPHER_KEY;
+let cachedKey = null;
 
 async function getCryptoKey() {
+  if (cachedKey) return cachedKey;
+
   const enc = new TextEncoder();
   const keyMaterial = await crypto.subtle.importKey(
     "raw",
-    enc.encode(SECRET_KEY_SEED),
+    enc.encode(KEY_SEED),
     { name: "PBKDF2" },
     false,
     ["deriveKey"]
   );
 
-  return crypto.subtle.deriveKey(
+  cachedKey = await crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
-      salt: enc.encode("foodsnap_salt_salt_99"),
+      salt: enc.encode("foodsnap_salt_99"),
       iterations: 1000,
       hash: "SHA-256",
     },
@@ -22,43 +25,47 @@ async function getCryptoKey() {
     false,
     ["encrypt", "decrypt"]
   );
+
+  return cachedKey;
+}
+
+function toBase64(bytes) {
+  let binary = "";
+  for (let i = 0; i < bytes.byteLength; i += 32768) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768));
+  }
+  return btoa(binary);
+}
+
+function fromBase64(base64) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
 
 /**
- * Encrypt a JSON object into a Base64 ciphertext string
- * @param {Object|Array} data
- * @returns {Promise<string>}
+ * Encrypt a JSON payload into a Base64 string
  */
 export async function encryptPayload(data) {
   try {
     const key = await getCryptoKey();
     const enc = new TextEncoder();
-    const encodedData = enc.encode(JSON.stringify(data));
-
-    // Generate random 12-byte IV for AES-GCM
     const iv = crypto.getRandomValues(new Uint8Array(12));
-    const encryptedContent = await crypto.subtle.encrypt(
-      {
-        name: "AES-GCM",
-        iv: iv,
-      },
+
+    const encrypted = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv },
       key,
-      encodedData
+      enc.encode(JSON.stringify(data))
     );
 
-    // Combine IV + Encrypted Data into single buffer
-    const combined = new Uint8Array(iv.length + encryptedContent.byteLength);
+    const combined = new Uint8Array(iv.length + encrypted.byteLength);
     combined.set(iv, 0);
-    combined.set(new Uint8Array(encryptedContent), iv.length);
+    combined.set(new Uint8Array(encrypted), iv.length);
 
-    // Convert to Base64
-    let binary = "";
-    const bytes = combined;
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
+    return toBase64(combined);
   } catch (error) {
     console.error("[Payload Encryption Error]:", error);
     return null;
@@ -66,9 +73,7 @@ export async function encryptPayload(data) {
 }
 
 /**
- * Decrypt a Base64 ciphertext string back into original JSON data
- * @param {string} encryptedBase64
- * @returns {Promise<any>}
+ * Decrypt a Base64 string back into original JSON
  */
 export async function decryptPayload(encryptedBase64) {
   try {
@@ -77,26 +82,20 @@ export async function decryptPayload(encryptedBase64) {
     }
 
     const key = await getCryptoKey();
-    const binary = atob(encryptedBase64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
+    const bytes = fromBase64(encryptedBase64);
+
+    if (bytes.length < 13) return null;
 
     const iv = bytes.slice(0, 12);
     const data = bytes.slice(12);
 
     const decrypted = await crypto.subtle.decrypt(
-      {
-        name: "AES-GCM",
-        iv: iv,
-      },
+      { name: "AES-GCM", iv },
       key,
       data
     );
 
-    const dec = new TextDecoder();
-    return JSON.parse(dec.decode(decrypted));
+    return JSON.parse(new TextDecoder().decode(decrypted));
   } catch (error) {
     console.error("[Payload Decryption Error]:", error);
     return null;

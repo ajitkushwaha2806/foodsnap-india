@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { getPlanTierConfig } from "../helpers";
 import { useRazorpayCheckout } from "@/hooks/useRazorpayCheckout";
 import { CheckCircle2, ArrowRight, Loader2, Sparkles } from "lucide-react";
+import posthog from "posthog-js";
 
 export default function PlanCard({ plan, index }) {
   const [includeUploadAddon, setIncludeUploadAddon] = useState(false);
@@ -15,6 +16,15 @@ export default function PlanCard({ plan, index }) {
   const baseAmount = plan.discountedAmount || plan.amount || 499;
   const totalAmount = includeUploadAddon ? baseAmount + 1000 : baseAmount;
   const displayTotal = `₹${totalAmount.toLocaleString("en-IN")}`;
+
+  const handleAddonToggle = (nextValue) => {
+    setIncludeUploadAddon(nextValue);
+    posthog.capture("upload_addon_toggled", {
+      plan_key: plan.key,
+      plan_name: plan.name,
+      enabled: nextValue,
+    });
+  };
 
   const handlePlanClick = (e) => {
     e.preventDefault();
@@ -94,7 +104,7 @@ export default function PlanCard({ plan, index }) {
 
         {/* Upload Add-on Checkbox */}
         <div
-          onClick={() => setIncludeUploadAddon(!includeUploadAddon)}
+          onClick={() => handleAddonToggle(!includeUploadAddon)}
           className={`p-3.5 rounded-2xl border transition-all duration-200 cursor-pointer select-none mb-6 ${
             includeUploadAddon
               ? "bg-primary/10 border-primary/40 shadow-xs ring-1 ring-primary/25"
@@ -105,7 +115,7 @@ export default function PlanCard({ plan, index }) {
             <input
               type="checkbox"
               checked={includeUploadAddon}
-              onChange={(e) => setIncludeUploadAddon(e.target.checked)}
+              onChange={(e) => handleAddonToggle(e.target.checked)}
               className="mt-0.5 size-4 accent-primary rounded cursor-pointer shrink-0"
               onClick={(e) => e.stopPropagation()}
             />

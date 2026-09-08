@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import posthog from "posthog-js";
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser, logoutUser, loadUser, clearError, resetUser, registerUser } from "../slice/userSlice";
 
@@ -18,10 +19,11 @@ export const useUser = () => {
     (credentials) => dispatch(loginUser(credentials)).unwrap(),
     [dispatch]
   );
-  const logout = useCallback(
-    () => dispatch(logoutUser()).unwrap(),
-    [dispatch]
-  );
+  const logout = useCallback(async () => {
+    const result = await dispatch(logoutUser()).unwrap();
+    posthog.reset();
+    return result;
+  }, [dispatch]);
   const fetchUser = useCallback(async () => {
     try {
       const res = await dispatch(loadUser());

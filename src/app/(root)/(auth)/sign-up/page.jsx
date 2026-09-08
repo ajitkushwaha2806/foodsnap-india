@@ -11,6 +11,7 @@ import { useState, startTransition } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User, Phone, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import posthog from "posthog-js";
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,6 +41,7 @@ export default function SignUpPage() {
     onSubmit: async (values) => {
       try {
         await register(values);
+        posthog.capture("user_registered");
         startTransition(() => {
           router.push(redirectPath);
         });

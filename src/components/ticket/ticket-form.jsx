@@ -9,6 +9,7 @@ import { useUser } from "@/store/hooks/useUser";
 import { useTicket } from "@/store/hooks/useTicket";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Mail, Phone, User, MessageSquare, Tag, CheckCircle2 } from "lucide-react";
+import posthog from "posthog-js";
 
 export default function TicketForm() {
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,7 @@ export default function TicketForm() {
 
       try {
         await handleCreateTicket(values);
+        posthog.capture("support_ticket_submitted");
         if (user) {
           loadTickets();
         }

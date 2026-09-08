@@ -11,6 +11,7 @@ import { useUser } from "@/store/hooks/useUser";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone, Eye, EyeOff, Lock, Loader2, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
+import posthog from "posthog-js";
 
 export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +36,7 @@ export default function SignInPage() {
     onSubmit: async (values) => {
       try {
         await login(values);
+        posthog.capture("user_signed_in");
         router.push(redirectPath);
       } catch (err) {
         console.error("Login error:", err);

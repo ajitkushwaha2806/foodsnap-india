@@ -4,6 +4,7 @@ import { useSearch } from "@/store/hooks/useSearch";
 import { SearchInput } from "./components/SearchInput";
 import { TrendingChips } from "./components/TrendingChips";
 import { useSearchShortcut } from "./hooks/useSearchShortcut";
+import posthog from "posthog-js";
 
 export function SearchBar({ onSearch = undefined } = {}) {
   const { updateQuery, query: reduxQuery } = useSearch();
@@ -22,6 +23,9 @@ export function SearchBar({ onSearch = undefined } = {}) {
     e?.preventDefault();
     const clean = localQuery.trim();
     updateQuery(clean);
+    if (clean) {
+      posthog.capture("image_search_performed", { source: "search_bar" });
+    }
     if (onSearch) onSearch(clean);
   };
 
@@ -35,6 +39,9 @@ export function SearchBar({ onSearch = undefined } = {}) {
     const nextQuery = localQuery.toLowerCase() === tag.toLowerCase() ? "" : tag;
     setLocalQuery(nextQuery);
     updateQuery(nextQuery);
+    if (nextQuery) {
+      posthog.capture("image_search_performed", { source: "trending_tag" });
+    }
     if (onSearch) onSearch(nextQuery);
   };
 
