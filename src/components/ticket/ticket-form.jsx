@@ -10,6 +10,7 @@ import { useTicket } from "@/store/hooks/useTicket";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2, Mail, Phone, User, MessageSquare, Tag, CheckCircle2 } from "lucide-react";
 import posthog from "posthog-js";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 
 export default function TicketForm() {
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,12 @@ export default function TicketForm() {
 
       try {
         await handleCreateTicket(values);
-        posthog.capture("support_ticket_submitted");
+        posthog.capture("support_ticket_submitted", {
+          subject: values.subject,
+          has_user_account: Boolean(user),
+        });
+        trackMetaEvent("Contact", { content_name: values.subject });
+        trackMetaEvent("Lead", { content_name: "Support Inquiry" });
         if (user) {
           loadTickets();
         }

@@ -5,6 +5,7 @@ import { useUser } from "@/store/hooks/useUser";
 import { promptLogin } from "@/lib/auth-helpers";
 import { useNotification } from "@/store/hooks/useNotification";
 import posthog from "posthog-js";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -117,6 +118,12 @@ export function useRazorpayCheckout() {
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_payment_id: response.razorpay_payment_id,
                 });
+                trackMetaEvent("Purchase", {
+                  content_name: planName,
+                  value: amount / 100,
+                  currency: currency || "INR",
+                  content_type: "product",
+                });
                 if (verifyRes.data?.isService || verifyRes.data?.hasUploadAddon) {
                   success(
                     verifyRes.data?.message ||
@@ -158,6 +165,11 @@ export function useRazorpayCheckout() {
           },
           modal: {
             ondismiss: () => {
+              posthog.capture("checkout_dismissed", {
+                plan_key: planKey,
+                plan_name: planName,
+                amount_paise: amount,
+              });
               setIsProcessing(false);
               setActivePlanKey(null);
               info("Payment checkout window closed.");
@@ -171,6 +183,12 @@ export function useRazorpayCheckout() {
           amount_paise: amount,
           currency: currency || "INR",
           include_upload_addon: includeUploadAddon,
+        });
+
+        trackMetaEvent("InitiateCheckout", {
+          content_name: planName,
+          value: amount / 100,
+          currency: currency || "INR",
         });
 
         const rzp = new window.Razorpay(options);

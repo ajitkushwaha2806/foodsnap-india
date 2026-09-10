@@ -20,6 +20,7 @@ export const useUser = () => {
     [dispatch]
   );
   const logout = useCallback(async () => {
+    posthog.capture("user_signed_out");
     const result = await dispatch(logoutUser()).unwrap();
     posthog.reset();
     return result;

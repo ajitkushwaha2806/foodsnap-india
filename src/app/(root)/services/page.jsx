@@ -65,11 +65,30 @@ const FAQS_FOOD_LICENSE = [
   },
 ];
 
+import posthog from "posthog-js";
+import { trackMetaEvent } from "@/lib/meta-pixel";
+
 function ServicesContent() {
   const searchParams = useSearchParams();
   const serviceParam = searchParams.get("service");
   const isFoodLicense = serviceParam === "food-license";
   const isZomatoSwiggy = serviceParam === "zomato-swiggy-setup";
+
+  React.useEffect(() => {
+    posthog.capture("services_page_viewed", {
+      service_tab: serviceParam || "all",
+      is_food_license: isFoodLicense,
+      is_zomato_swiggy: isZomatoSwiggy,
+    });
+    trackMetaEvent("ViewContent", {
+      content_name: isFoodLicense
+        ? "FSSAI License Service"
+        : isZomatoSwiggy
+        ? "Zomato Swiggy Setup Service"
+        : "Photo Upload Growth Services",
+      content_type: "service",
+    });
+  }, [serviceParam, isFoodLicense, isZomatoSwiggy]);
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">

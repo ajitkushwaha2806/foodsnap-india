@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import posthog from "posthog-js";
 import { useUser } from "@/store/hooks/useUser";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect, useCallback } from "react";
@@ -193,6 +194,15 @@ export default function ServiceBannerCarousel() {
             <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/60">
               <Link
                 href={slide.ctaLink}
+                onClick={() => {
+                  posthog.capture("growth_service_banner_clicked", {
+                    service_id: slide.id,
+                    service_key: slide.key,
+                    title: slide.title,
+                    price: slide.price,
+                    cta_link: slide.ctaLink,
+                  });
+                }}
                 className={`inline-flex items-center gap-1 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-xs font-semibold transition-all shadow-xs cursor-pointer shrink-0 ${slide.buttonClass}`}
               >
                 <span>{slide.ctaText}</span>

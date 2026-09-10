@@ -5,13 +5,21 @@ import { decryptPayload } from "@/lib/crypto";
 
 const fetchSearch = async ({ queryKey, pageParam = 1 }) => {
   const [, { query, limit }] = queryKey;
+  const trimmedQuery = query ? query.trim() : "";
+
+  const params = {
+    page: pageParam,
+    limit,
+  };
+
+  if (trimmedQuery) {
+    params.search = trimmedQuery;
+  } else {
+    params.latest = true;
+  }
 
   const res = await apiClient.get("/api/images/search", {
-    params: {
-      search: query ? query.trim() : undefined,
-      page: pageParam,
-      limit,
-    },
+    params,
   });
 
   let payload = res.data;

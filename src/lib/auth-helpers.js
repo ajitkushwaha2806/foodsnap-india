@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import posthog from "posthog-js";
 import { store } from "@/store";
 import { addNotification } from "@/store/slice/notificationSlice";
 
@@ -10,6 +11,11 @@ export function promptLogin({ actionName = "download this image", message, custo
   const currentPath =
     customRedirectPath ||
     window.location.pathname + window.location.search;
+
+  posthog.capture("login_prompt_triggered", {
+    action_name: actionName,
+    current_path: currentPath,
+  });
 
   const redirectUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
   const notificationMessage =
@@ -35,6 +41,10 @@ export function promptLogin({ actionName = "download this image", message, custo
 
 export function promptPricing({ message, duration = 4000, dispatch } = {}) {
   if (typeof window === "undefined") return;
+
+  posthog.capture("pricing_prompt_triggered", {
+    reason: "out_of_credits",
+  });
 
   const notificationMessage =
     message || "You have no download credits left. Please recharge your credits to download.";

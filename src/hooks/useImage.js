@@ -6,6 +6,7 @@ import { useUser } from "@/store/hooks/useUser";
 import { useNotification } from "@/store/hooks/useNotification";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import posthog from "posthog-js";
+import { trackMetaCustomEvent } from "@/lib/meta-pixel";
 
 export function useImage() {
   const queryClient = useQueryClient();
@@ -13,6 +14,12 @@ export function useImage() {
   const { success, error: notifyError } = useNotification();
 
   const downloadMutation = useMutation({
+    onMutate: (variables) => {
+      posthog.capture("image_download_initiated", {
+        image_id: variables.imageId,
+        image_title: variables.title,
+      });
+    },
     mutationFn: async ({ imageId, title = "food-image" }) => {
       const res = await apiClient.get(`/api/images/${imageId}/download`);
       const { imageUrl } = res.data;
@@ -41,13 +48,24 @@ export function useImage() {
       posthog.capture("image_downloaded", {
         image_id: variables.imageId,
         image_title: variables.title,
+        already_downloaded: Boolean(data?.alreadyDownloaded),
+        remaining_credits: data?.remainingCredits,
+      });
+      trackMetaCustomEvent("ImageDownload", {
+        content_name: variables.title,
+        content_id: variables.imageId,
       });
       success("Image downloaded successfully!");
       fetchUser?.();
     },
-    onError: (err) => {
+    onError: (err, variables) => {
       const status = err?.response?.status;
       const data = err?.response?.data;
+      posthog.capture("image_download_failed", {
+        image_id: variables?.imageId,
+        status_code: status,
+        error_message: data?.message || err?.message,
+      });
       if (status === 401) {
         promptLogin({
           actionName: "download this image",
@@ -78,7 +96,11 @@ export function useImage() {
       success("Image reported and removed from approved library.");
       queryClient.invalidateQueries({ queryKey: ["images_search"] });
     },
-    onError: (err) => {
+    onError: (err, imageId) => {
+      posthog.capture("image_report_failed", {
+        image_id: imageId,
+        error_message: err?.response?.data?.message || err?.message,
+      });
       notifyError(err?.response?.data?.message || "Failed to report image");
     },
   });

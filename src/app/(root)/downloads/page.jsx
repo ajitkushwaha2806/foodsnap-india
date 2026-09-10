@@ -8,6 +8,7 @@ import { promptLogin } from "@/lib/auth-helpers";
 import { ImageCard } from "@/components/search/image-card";
 import { useDownloadedImages } from "@/hooks/useDownloadedImages";
 import { ChevronLeft, ChevronRight, ImageIcon, RefreshCcw, LogIn, Sparkles } from "lucide-react";
+import posthog from "posthog-js";
 
 export default function DownloadsPage() {
   const router = useRouter();
@@ -21,6 +22,13 @@ export default function DownloadsPage() {
     isFetching,
     refetch,
   } = useDownloadedImages({ page, limit });
+
+  React.useEffect(() => {
+    posthog.capture("downloads_page_viewed", {
+      page,
+      total_count: data?.pagination?.totalCount || 0,
+    });
+  }, [page, data?.pagination?.totalCount]);
 
   const loading = isUserLoading || isDownloadsLoading || isFetching;
   const downloads = data?.downloads || [];

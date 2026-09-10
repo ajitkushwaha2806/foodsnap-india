@@ -10,12 +10,17 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/ui/site-header";
 import { setupAxiosInterceptors } from "@/lib/auth-helpers";
 import { useUser } from "@/store/hooks/useUser";
+import { trackPageView } from "@/lib/meta-pixel";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function AppShell({ children }) {
     const pathname = usePathname();
     const AUTH_ROUTES = ["/sign-in", "/sign-up", "/login", "/register"];
     const isAuthPage = AUTH_ROUTES.some((route) => pathname?.startsWith(route));
+
+    useEffect(() => {
+        trackPageView();
+    }, [pathname]);
 
     useEffect(() => {
         setupAxiosInterceptors?.();

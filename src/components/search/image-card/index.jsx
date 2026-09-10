@@ -69,10 +69,10 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
   return (
     <TooltipProvider delayDuration={200}>
       <div className="cursor-pointer group">
-        <div className="overflow-hidden border rounded-md p-3 border-gray-200 bg-white shadow-sm hover:shadow-md transition-all">
-          <div className="relative rounded-md overflow-hidden shadow-sm">
+        <div className="overflow-hidden border rounded-xl p-3 border-slate-200/80 bg-white dark:bg-card shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-300 hover:-translate-y-0.5">
+          <div className="relative rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900 shadow-2xs aspect-4/3">
             {currentSrc && (
-              <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
+              <div className="absolute top-2.5 right-2.5 z-30 flex items-center gap-1.5">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -80,17 +80,17 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
                       size="icon"
                       disabled={isReporting}
                       onClick={reportImage}
-                      className="h-8 w-8 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200/80 hover:bg-white shadow-xs cursor-pointer"
+                      className="h-8 w-8 rounded-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 shadow-xs cursor-pointer transition-transform active:scale-95"
                     >
                       {isReporting ? (
                         <Loader2
-                          size={16}
+                          size={15}
                           className="animate-spin text-red-500"
                         />
                       ) : (
                         <MessageSquareWarning
-                          size={16}
-                          className="text-red-600"
+                          size={15}
+                          className="text-red-600 dark:text-red-500"
                         />
                       )}
                     </Button>
@@ -105,17 +105,17 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
                       size="icon"
                       disabled={isDownloading}
                       onClick={startDownload}
-                      className="h-8 w-8 rounded-md bg-white/80 backdrop-blur-sm border border-slate-200/80 hover:bg-white shadow-xs cursor-pointer"
+                      className="h-8 w-8 rounded-lg bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/80 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 shadow-xs cursor-pointer transition-transform active:scale-95"
                     >
                       {isDownloading ? (
                         <Loader2
-                          size={16}
-                          className="animate-spin text-gray-700"
+                          size={15}
+                          className="animate-spin text-primary"
                         />
                       ) : (
                         <Download
-                          size={16}
-                          className="text-gray-700"
+                          size={15}
+                          className="text-slate-700 dark:text-slate-200"
                         />
                       )}
                     </Button>
@@ -128,44 +128,47 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
             )}
 
             {premium && (
-              <div className="absolute top-3 left-3 z-30 rounded-md bg-amber-500 text-white px-2 py-0.5 text-[10px] font-bold shadow-xs flex items-center gap-1">
+              <div className="absolute top-2.5 left-2.5 z-30 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-2.5 py-0.5 text-[10px] font-bold shadow-xs flex items-center gap-1">
                 <Sparkles size={11} />
                 <span>PRO</span>
               </div>
             )}
 
             {currentSrc && (
-              <div className="absolute bottom-2.5 right-2.5 rounded-md text-white px-2 py-0.5 text-[11px] font-medium bg-black/60 backdrop-blur-md z-10 flex items-center gap-1.5 border border-white/10 shadow-xs select-none">
-                <span className="inline-block size-1.5 rounded-full bg-emerald-400"></span>
-                <span>Approved on Zomato &amp; Swiggy</span>
+              <div className="absolute bottom-2.5 left-2.5 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium shadow-md select-none pointer-events-none">
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                </span>
+                <span className="tracking-tight leading-none text-white/95">
+                  Approved on Zomato &amp; Swiggy
+                </span>
               </div>
             )}
 
             {currentSrc ? (
-              <div className="relative w-full h-48">
-                <img
-                  src={currentSrc}
-                  alt={displayTitle}
-                  onError={handleImageError}
-                  draggable={false}
-                  className="w-full h-full object-cover select-none pointer-events-auto touch-pan-y transition-transform duration-300 group-hover:scale-[1.02]"
-                  loading="lazy"
-                />
-              </div>
+              <img
+                src={currentSrc}
+                alt={displayTitle}
+                onError={handleImageError}
+                draggable={false}
+                className="w-full h-full object-cover object-center select-none pointer-events-auto touch-pan-y transition-transform duration-500 group-hover:scale-[1.03]"
+                loading="lazy"
+              />
             ) : (
-              <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
-                <ImageIcon className="text-gray-400 w-8 h-8" />
+              <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                <ImageIcon className="text-slate-400 w-8 h-8" />
               </div>
             )}
           </div>
 
           {displayTitle && (
-            <p
-              className="mt-3 text-sm font-medium text-gray-700 truncate"
+            <h3
+              className="mt-2.5 text-sm font-semibold text-slate-800 dark:text-slate-100 truncate group-hover:text-primary transition-colors tracking-tight px-0.5"
               title={displayTitle}
             >
               {displayTitle}
-            </p>
+            </h3>
           )}
         </div>
       </div>

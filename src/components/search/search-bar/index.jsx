@@ -5,6 +5,7 @@ import { SearchInput } from "./components/SearchInput";
 import { TrendingChips } from "./components/TrendingChips";
 import { useSearchShortcut } from "./hooks/useSearchShortcut";
 import posthog from "posthog-js";
+import { trackMetaEvent } from "@/lib/meta-pixel";
 
 export function SearchBar({ onSearch = undefined } = {}) {
   const { updateQuery, query: reduxQuery } = useSearch();
@@ -24,12 +25,21 @@ export function SearchBar({ onSearch = undefined } = {}) {
     const clean = localQuery.trim();
     updateQuery(clean);
     if (clean) {
-      posthog.capture("image_search_performed", { source: "search_bar" });
+      posthog.capture("image_search_performed", {
+        query: clean,
+        source: "search_bar",
+      });
+      trackMetaEvent("Search", { search_string: clean });
     }
     if (onSearch) onSearch(clean);
   };
 
   const handleClear = () => {
+    if (localQuery) {
+      posthog.capture("search_query_cleared", {
+        previous_query: localQuery,
+      });
+    }
     setLocalQuery("");
     updateQuery("");
     inputRef.current?.focus();
@@ -40,7 +50,11 @@ export function SearchBar({ onSearch = undefined } = {}) {
     setLocalQuery(nextQuery);
     updateQuery(nextQuery);
     if (nextQuery) {
-      posthog.capture("image_search_performed", { source: "trending_tag" });
+      posthog.capture("trending_tag_clicked", { tag: nextQuery });
+      posthog.capture("image_search_performed", {
+        query: nextQuery,
+        source: "trending_tag",
+      });
     }
     if (onSearch) onSearch(nextQuery);
   };
