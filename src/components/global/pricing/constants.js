@@ -5,9 +5,9 @@ export const plans = [
     key: "basic",
     name: "Basic Plan",
     price: "₹499",
-    description: "Download 40 high-quality food images.",
+    description: "Download 25 high-quality food images.",
     features: [
-      "40 image downloads",
+      "25 image downloads",
       "Zomato & Swiggy approved photos",
       "Access to trending photo packs",
       "High-quality images",
@@ -20,15 +20,15 @@ export const plans = [
     discountedAmount: 499,
     discountPercentage: 0,
     taxPercentage: 18,
-    downloads: 40,
+    downloads: 25,
   },
   {
     key: "pro",
     name: "Pro Plan",
     price: "₹999",
-    description: "Download 100 high-quality food images.",
+    description: "Download 80 high-quality food images.",
     features: [
-      "100 image downloads",
+      "80 image downloads",
       "Access to entire photo library",
       "Zomato & Swiggy approved photos",
       "High-quality food images",
@@ -42,12 +42,12 @@ export const plans = [
     discountedAmount: 999,
     discountPercentage: 0,
     taxPercentage: 18,
-    downloads: 100,
+    downloads: 80,
   },
   {
     key: "premium",
     name: "Premium Plan",
-    price: "₹1999",
+    price: "₹1,999",
     description: "Download unlimited high-quality food images.",
     features: [
       "Unlimited image downloads",
@@ -217,7 +217,7 @@ export const fssaiPlans = [
 export const PLAN_TIER_CONFIGS = {
   basic: {
     icon: Sparkles,
-    perImage: "₹12.47 / image",
+    perImage: "₹19.96 / image",
     tagline: "Great for expanding multi-cuisine restaurants",
     badge: null,
     badgeClass: "",
@@ -228,7 +228,7 @@ export const PLAN_TIER_CONFIGS = {
   },
   pro: {
     icon: Sparkles,
-    perImage: "₹9.99 / image",
+    perImage: "₹12.49 / image",
     tagline: "Best value for growing restaurants & food chains",
     badge: null,
     badgeClass: "",
