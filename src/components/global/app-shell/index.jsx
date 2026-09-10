@@ -12,6 +12,7 @@ import { setupAxiosInterceptors } from "@/lib/auth-helpers";
 import { useUser } from "@/store/hooks/useUser";
 import { trackPageView } from "@/lib/meta-pixel";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import WhatsAppButton from "@/components/global/WhatsAppButton";
 
 export default function AppShell({ children }) {
     const pathname = usePathname();
@@ -97,6 +98,7 @@ function InnerAppShell({ isAuthPage, children }) {
                     <main className="flex-1 overflow-y-auto min-w-0">{children}</main>
                 </SidebarInset>
             </div>
+            <WhatsAppButton />
         </SidebarProvider>
     );
 }
