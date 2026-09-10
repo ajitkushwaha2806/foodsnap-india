@@ -25,30 +25,27 @@ export default function WhatsAppButton() {
   return (
     <aside
       aria-label="WhatsApp Support"
-      className="fixed bottom-5 right-5 z-50 flex items-center group pointer-events-auto"
+      className="fixed bottom-5 right-5 z-40 flex items-center group pointer-events-auto"
     >
       {/* Tooltip on hover */}
-      <span className="hidden sm:inline-block mr-2.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-medium shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-        Chat with us on WhatsApp
+      <span className="hidden sm:inline-block mr-2 px-2.5 py-1 rounded-md bg-slate-900/90 text-white text-xs font-medium shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+        Chat with us
       </span>
 
-      {/* Floating Button */}
+      {/* Floating Button - subtle, non-distracting, no pulse */}
       <motion.a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
         aria-label="Chat with us on WhatsApp at 9311507651"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.94 }}
-        className="relative flex items-center justify-center size-13 sm:size-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-xl shadow-green-600/30 transition-all duration-300 cursor-pointer"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="relative flex items-center justify-center size-11 sm:size-12 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-md hover:shadow-lg opacity-85 hover:opacity-100 transition-all duration-200 cursor-pointer"
       >
-        {/* Soft pulse ring */}
-        <span className="absolute inset-0 rounded-full bg-[#25D366] opacity-70 animate-ping -z-10" />
-
         {/* WhatsApp SVG Icon */}
         <svg
-          className="size-7 sm:size-8 fill-current"
+          className="size-5 sm:size-6 fill-current"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
