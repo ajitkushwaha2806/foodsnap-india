@@ -1,12 +1,23 @@
 "use client";
 import axios from "axios";
 import { apiClient } from "@/lib/api-client";
-import { promptLogin, promptPricing } from "@/lib/auth-helpers";
+import { promptLogin } from "@/lib/auth-helpers";
 import { useUser } from "@/store/hooks/useUser";
 import { useNotification } from "@/store/hooks/useNotification";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import posthog from "posthog-js";
 import { trackMetaCustomEvent } from "@/lib/meta-pixel";
+
+export function isOutOfCreditsError(err) {
+  const status = err?.response?.status;
+  const data = err?.response?.data;
+  return (
+    status === 403 ||
+    data?.credits === 0 ||
+    (typeof data?.message === "string" &&
+      data.message.toLowerCase().includes("credits"))
+  );
+}
 
 export function useImage() {
   const queryClient = useQueryClient();
@@ -66,21 +77,14 @@ export function useImage() {
         status_code: status,
         error_message: data?.message || err?.message,
       });
+      // Out-of-credits is shown inline at the download button by the card, so
+      // we do not raise a timed notification that redirects to /pricing.
       if (status === 401) {
         promptLogin({
           actionName: "download this image",
           duration: 4000,
         });
-      } else if (
-        status === 403 ||
-        data?.credits === 0 ||
-        (typeof data?.message === "string" && data.message.toLowerCase().includes("credits"))
-      ) {
-        promptPricing({
-          message: data?.message || "You have no download credits left. Please recharge your credits to download.",
-          duration: 4000,
-        });
-      } else {
+      } else if (!isOutOfCreditsError(err)) {
         notifyError(data?.message || err?.message || "Failed to download image");
       }
     },
