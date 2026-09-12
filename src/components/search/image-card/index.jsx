@@ -33,7 +33,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
     if (!user && !isAuthenticated) {
       promptLogin({
         actionName: "download this image",
-        message: "Please sign in first to download images",
+        message: "Please sign up first to download images",
         duration: 4000,
       });
       return;
@@ -127,12 +127,10 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
               </div>
             )}
 
-            {premium && (
-              <div className="absolute top-2.5 left-2.5 z-30 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-2.5 py-0.5 text-[10px] font-bold shadow-xs flex items-center gap-1">
-                <Sparkles size={11} />
-                <span>PRO</span>
-              </div>
-            )}
+            <div className="absolute top-2.5 left-2.5 z-30 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-2.5 py-0.5 text-[10px] font-bold shadow-xs flex items-center gap-1">
+              <Sparkles size={11} />
+              <span>PREMIUM</span>
+            </div>
 
             {currentSrc && (
               <div className="absolute bottom-2.5 left-2.5 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium shadow-md select-none pointer-events-none">

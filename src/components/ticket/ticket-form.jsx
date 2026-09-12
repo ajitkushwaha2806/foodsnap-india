@@ -62,14 +62,7 @@ export default function TicketForm() {
 
   return (
     <div className="w-full">
-      <div className="text-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-          Support & Feedback
-        </h1>
-        <p className="text-muted-foreground mt-1.5 text-sm">
-          Have a question, issue, or feature request? We&apos;re here to help you.
-        </p>
-      </div>
+
 
       <Card className="w-full border border-border rounded-xl bg-card shadow-xs">
         <CardContent className="p-5 sm:p-7">

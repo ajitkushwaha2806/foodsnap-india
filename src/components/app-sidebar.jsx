@@ -17,11 +17,6 @@ const navigationData = {
                     icon: Compass,
                 },
                 {
-                    title: "Growth Services",
-                    url: "/services",
-                    icon: Rocket,
-                },
-                {
                     title: "My Downloads",
                     url: "/downloads",
                     icon: FolderDown,

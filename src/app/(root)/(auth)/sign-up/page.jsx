@@ -10,7 +10,7 @@ import { useUser } from "@/store/hooks/useUser";
 import { useState, startTransition } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
-import { User, Phone, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import { User, Phone, Lock, Eye, EyeOff, Loader2, ArrowRight, ArrowLeft, ShieldCheck } from "lucide-react";
 import posthog from "posthog-js";
 
 import { trackMetaEvent } from "@/lib/meta-pixel";
@@ -64,6 +64,21 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center px-2 py-8 bg-slate-50 dark:bg-slate-950 selection:bg-primary/20 selection:text-primary">
+      <div className="w-full max-w-md mb-4 flex items-center justify-between">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors group"
+        >
+          <ArrowLeft className="size-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
+          <span>Back to Gallery</span>
+        </Link>
+
+        <span className="text-[11px] font-medium text-muted-foreground flex items-center gap-1">
+          <ShieldCheck className="size-3.5 text-primary" />
+          <span>Secure Sign Up</span>
+        </span>
+      </div>
+
       <Card className="w-full max-w-md border border-border/80 rounded-xl shadow-lg shadow-slate-200/50 dark:shadow-black/50 bg-card overflow-hidden py-0 gap-0">
         <div className="flex items-center justify-center p-4 bg-primary">
           <Link

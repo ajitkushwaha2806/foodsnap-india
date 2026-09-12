@@ -17,16 +17,16 @@ export function promptLogin({ actionName = "download this image", message, custo
     current_path: currentPath,
   });
 
-  const redirectUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
+  const redirectUrl = `/sign-up?redirect=${encodeURIComponent(currentPath)}`;
   const notificationMessage =
-    message || `Please sign in first to ${actionName}.`;
+    message || `Please sign up first to ${actionName}.`;
 
   const actionPayload = {
     type: "warning",
     message: notificationMessage,
     action: {
       redirect: redirectUrl,
-      buttonText: "Sign In",
+      buttonText: "Sign Up",
       autoRedirect: true,
     },
     duration,
@@ -110,5 +110,5 @@ export function redirectToLogin(customRedirectPath) {
   const currentPath =
     customRedirectPath ||
     window.location.pathname + window.location.search;
-  window.location.href = `/sign-in?redirect=${encodeURIComponent(currentPath)}`;
+  window.location.href = `/sign-up?redirect=${encodeURIComponent(currentPath)}`;
 }
