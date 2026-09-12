@@ -21,13 +21,17 @@ export function promptLogin({ actionName = "download this image", message, custo
   const notificationMessage =
     message || `Please sign up first to ${actionName}.`;
 
+  // Never navigate away a buyer the app already treats as signed in — a stale
+  // 401 must not silently walk an authenticated user off the page.
+  const isAuthenticated = Boolean(store?.getState?.()?.user?.isAuthenticated);
+
   const actionPayload = {
     type: "warning",
     message: notificationMessage,
     action: {
       redirect: redirectUrl,
       buttonText: "Sign Up",
-      autoRedirect: true,
+      autoRedirect: !isAuthenticated,
     },
     duration,
   };
