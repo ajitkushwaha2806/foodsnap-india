@@ -39,35 +39,6 @@ export function promptLogin({ actionName = "download this image", message, custo
   }
 }
 
-export function promptPricing({ message, duration = 4000, dispatch } = {}) {
-  if (typeof window === "undefined") return;
-
-  posthog.capture("pricing_prompt_triggered", {
-    reason: "out_of_credits",
-  });
-
-  const notificationMessage =
-    message || "You have no download credits left. Please recharge your credits to download.";
-
-  const actionPayload = {
-    type: "warning",
-    message: notificationMessage,
-    action: {
-      redirect: "/pricing",
-      buttonText: "Recharge",
-      autoRedirect: true,
-    },
-    duration,
-  };
-
-  if (dispatch) {
-    dispatch(addNotification(actionPayload));
-  } else if (store?.dispatch) {
-    store.dispatch(addNotification(actionPayload));
-  }
-}
-
-
 export function setupAxiosInterceptors() {
   if (isInterceptorSetup || typeof window === "undefined") return;
   isInterceptorSetup = true;

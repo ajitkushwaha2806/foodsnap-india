@@ -1,5 +1,6 @@
 "use client";
-import { useImage } from "@/hooks/useImage";
+import Link from "next/link";
+import { useImage, isOutOfCreditsError } from "@/hooks/useImage";
 import { useUser } from "@/store/hooks/useUser";
 import { Button } from "@/components/ui/button";
 import { promptLogin } from "@/lib/auth-helpers";
@@ -11,7 +12,8 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
   const { handleDownloadImage, handleReportImage } = useImage();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isReporting, setIsReporting] = useState(false);
-  const { user, isAuthenticated } = useUser();
+  const [creditNotice, setCreditNotice] = useState("");
+  const { user, isAuthenticated, fetchUser } = useUser();
 
   const displayTitle = title || name || "Food Photo";
   const rawMasterUrl = img || image_url;
@@ -30,20 +32,42 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
 
   const startDownload = async (e) => {
     e?.stopPropagation();
+
+    // Hold the button in its busy state at once, so it never looks dead while
+    // we confirm the session.
+    setIsDownloading(true);
+    setCreditNotice("");
+
+    // The store user is only loaded by the sidebar widget, so an early click
+    // can look signed out even for a signed-in user. Confirm the session with
+    // the server before we treat anyone as signed out.
     if (!user && !isAuthenticated) {
-      promptLogin({
-        actionName: "download this image",
-        message: "Please sign up first to download images",
-        duration: 4000,
-      });
-      return;
+      const loadedUser = await fetchUser?.();
+      const signedIn = loadedUser && typeof loadedUser === "object";
+      if (!signedIn) {
+        promptLogin({
+          actionName: "download this image",
+          message: "Please sign up first to download images",
+          duration: 4000,
+        });
+        setIsDownloading(false);
+        return;
+      }
     }
 
-    setIsDownloading(true);
     try {
       await handleDownloadImage(imageId, displayTitle);
     } catch (err) {
-      console.error("Download error:", err);
+      // Show the zero-credit refusal inline at the button instead of a timed
+      // page redirect to /pricing.
+      if (isOutOfCreditsError(err)) {
+        setCreditNotice(
+          err?.response?.data?.message ||
+            "No download credits left. Recharge to download."
+        );
+      } else {
+        console.error("Download error:", err);
+      }
     } finally {
       setIsDownloading(false);
     }
@@ -167,6 +191,15 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
             >
               {displayTitle}
             </h3>
+          )}
+
+          {creditNotice && (
+            <p className="mt-1.5 text-[11px] font-medium text-amber-600 dark:text-amber-500 px-0.5">
+              {creditNotice}{" "}
+              <Link href="/pricing" className="underline underline-offset-2">
+                Recharge
+              </Link>
+            </p>
           )}
         </div>
       </div>
