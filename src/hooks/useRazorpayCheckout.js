@@ -39,18 +39,33 @@ export function useRazorpayCheckout() {
         typeof plan === "object" ? plan.includeUploadAddon : optionsParam.includeUploadAddon
       );
 
-      if (!user && !isAuthenticated) {
-        promptLogin({
-          actionName: "purchase this plan",
-          message: "Please sign in first to subscribe to a plan.",
-          customRedirectPath: `/pricing?plan=${planKey}&includeUploadAddon=${includeUploadAddon}&autoCheckout=true`,
-          duration: 4000,
-        });
-        return;
-      }
-
+      // Show the processing state right away so the button never looks dead
+      // while we confirm the session.
       setIsProcessing(true);
       setActivePlanKey(planKey);
+
+      let currentUser = user;
+
+      // The session may not have hydrated yet — buyers often reach /pricing
+      // through a redirect before Redux loads the user, which makes an
+      // authenticated buyer look signed out. Confirm with the server before
+      // treating them as signed out, so they are not bounced to sign-up.
+      if (!currentUser && !isAuthenticated) {
+        const loadedUser = await fetchUser?.();
+        if (loadedUser && typeof loadedUser === "object") {
+          currentUser = loadedUser;
+        } else {
+          promptLogin({
+            actionName: "purchase this plan",
+            message: "Please sign in first to subscribe to a plan.",
+            customRedirectPath: `/pricing?plan=${planKey}&includeUploadAddon=${includeUploadAddon}&autoCheckout=true`,
+            duration: 4000,
+          });
+          setIsProcessing(false);
+          setActivePlanKey(null);
+          return;
+        }
+      }
 
       try {
         const isScriptLoaded = await loadRazorpayScript();
@@ -87,8 +102,8 @@ export function useRazorpayCheckout() {
           image: "/assets/logo-transparent.png",
           order_id,
           prefill: {
-            name: user?.name || "",
-            contact: user?.phone || "",
+            name: currentUser?.name || "",
+            contact: currentUser?.phone || "",
           },
           theme: {
             color: "#16a34a",
