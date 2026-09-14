@@ -48,9 +48,9 @@ export const plans = [
     key: "premium",
     name: "Premium Plan",
     price: "₹1,999",
-    description: "Download up to 1000 high-quality food images.",
+    description: "Download unlimited high-quality food images.",
     features: [
-      "1000 image downloads",
+      "Unlimited image downloads",
       "Full access to photo library",
       "Zomato & Swiggy approved photos",
       "Priority photo request handling",
@@ -59,18 +59,18 @@ export const plans = [
     ],
     button: "Go Premium",
     link: "/payment/cart?plan=premium",
-    highlight: false,
+    highlight: true,
     duration: 30,
     amount: 1999,
     discountedAmount: 1999,
     discountPercentage: 0,
     taxPercentage: 18,
-    downloads: 1000,
+    downloads: "unlimited",
   },
   {
     key: "yearly",
     name: "Yearly Plan",
-    price: "₹3,499",
+    price: "₹2,999",
     description: "Download unlimited high-quality food images for a year.",
     features: [
       "Unlimited image downloads",
@@ -84,8 +84,8 @@ export const plans = [
     link: "/payment/cart?plan=yearly",
     highlight: true,
     duration: 365,
-    amount: 3499,
-    discountedAmount: 3499,
+    amount: 2999,
+    discountedAmount: 2999,
     discountPercentage: 0,
     taxPercentage: 18,
     downloads: "unlimited",
@@ -97,9 +97,8 @@ export const services = [
     key: "dfy-photo-upload",
     name: "Done-For-You Photo & Menu Upload",
     price: "Starting from ₹1,000",
-    tagline: "Our team formats & uploads up to 150 food photos on your behalf",
     description:
-      "Our team uploads, formats, and tags your chosen high-resolution food photos directly to your restaurant's Zomato & Swiggy menus on your behalf.",
+      "Our team formats, optimizes, and uploads your high-resolution food photos directly to your restaurant's Zomato & Swiggy menus on your behalf.",
     tiers: [
       {
         key: "tier-40",
@@ -134,38 +133,50 @@ export const services = [
       "100% platform approval guarantee",
       "Turnaround completed within 24–48 hours",
     ],
-    badge: "⚡ Most Popular Add-on",
-    button: "Order Photo Upload",
+    button: "Get Photo Upload Service",
+    link: "/services?service=dfy-photo-upload",
     highlight: true,
+    duration: 0,
+    renewPrice: 0,
     amount: 1000,
+    discountedAmount: 1000,
+    discountPercentage: 0,
+    taxPercentage: 18,
     image: "/assets/banners/upload-service.webp",
   },
   {
     key: "zomato-swiggy-setup",
     name: "Complete Zomato + Swiggy Setup",
     price: "₹3,499",
-    tagline: "End-to-end merchant onboarding & menu setup up to 50 items",
     description:
       "End-to-end onboarding: account creation, menu setup up to 50 items, photo optimization, and full platform setup for both Zomato & Swiggy.",
     features: [
-      "Create/claim Zomato & Swiggy merchant accounts",
+      "Create/claim Zomato & Swiggy accounts",
       "Full menu setup & digitization up to 50 items",
-      "Image selection & platform-compliant resizing",
-      "Item descriptions, pricing & category mapping",
-      "1 month menu update & rate change assistance",
-      "Ads & promotions launch guidance",
+      "Image selection & Zomato-compliant resizing",
+      "Category & cuisine mapping",
+      "Basic SEO for menu items",
+      "Verification guidance and onboarding support",
+      "1 follow-up to fix issues after go-live",
+      "Training on how to manage menu & images",
+      "Monthly menu updates for first month (unlimited rate/item changes)",
+      "Ads & offers strategy guidance for first month",
     ],
-    badge: "🚀 Full Setup",
-    button: "Order Full Setup",
-    highlight: false,
+    button: "Buy Full Setup",
+    link: "/services?service=zomato-swiggy-setup",
+    highlight: true,
+    duration: 0,
+    renewPrice: 0,
     amount: 3499,
+    discountedAmount: 3499,
+    discountPercentage: 0,
+    taxPercentage: 18,
     image: "/assets/banners/store-setup.jpg",
   },
   {
     key: "food-license",
     name: "FSSAI Food License Registration",
     price: "Starting from ₹699",
-    tagline: "1-Year (₹699 in 24h) or 5-Year (₹2,499 in 7–15 days)",
     description:
       "Assistance with food license application paperwork and submission guidance so you get compliant quickly.",
     features: [
@@ -176,10 +187,15 @@ export const services = [
       "Updates on Application Status",
       "Secure & Encrypted Processing",
     ],
-    badge: "📋 Fast Compliance",
     button: "Get License Help",
+    link: "/services?service=food-license",
     highlight: false,
+    duration: 0,
+    renewPrice: 0,
     amount: 699,
+    discountedAmount: 699,
+    discountPercentage: 0,
+    taxPercentage: 18,
     image: "/assets/banners/food-license.png",
   },
 ];
@@ -237,69 +253,6 @@ export const fssaiPlans = [
   },
 ];
 
-export const PLAN_TIER_CONFIGS = {
-  basic: {
-    icon: Sparkles,
-    perImage: "₹19.96 / image",
-    tagline: "Great for expanding multi-cuisine restaurants",
-    badge: null,
-    badgeClass: "",
-    accentColor: "border-border/70 hover:border-primary/40",
-    buttonClass:
-      "border border-primary text-primary bg-primary/5 hover:bg-primary hover:text-primary-foreground font-semibold",
-    isFeatured: false,
-  },
-  pro: {
-    icon: Sparkles,
-    perImage: "₹12.49 / image",
-    tagline: "Best value for growing restaurants & food chains",
-    badge: null,
-    badgeClass: "",
-    accentColor: "border-border/70 hover:border-primary/40",
-    buttonClass:
-      "border border-primary text-primary bg-primary/5 hover:bg-primary hover:text-primary-foreground font-semibold",
-    isFeatured: false,
-  },
-  premium: {
-    icon: Crown,
-    perImage: "1000 Images",
-    tagline: "High volume access for agencies & restaurant groups",
-    badge: "⭐ 1000 Images",
-    badgeClass:
-      "bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/30",
-    accentColor:
-      "border-primary shadow-xl shadow-primary/10 ring-2 ring-primary/40 bg-gradient-to-b from-primary/5 via-card to-card",
-    buttonClass:
-      "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 font-semibold",
-    isFeatured: true,
-  },
-  yearly: {
-    icon: Crown,
-    perImage: "Unlimited Downloads",
-    tagline: "Unlimited access for a full year",
-    badge: "⭐ Unlimited Access",
-    badgeClass:
-      "bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/30",
-    accentColor:
-      "border-primary shadow-xl shadow-primary/10 ring-2 ring-primary/40 bg-gradient-to-b from-primary/5 via-card to-card",
-    buttonClass:
-      "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/25 font-semibold",
-    isFeatured: true,
-  },
-};
-
-export const DEFAULT_PLAN_CONFIG = {
-  icon: Sparkles,
-  perImage: null,
-  tagline: "High quality food photography",
-  badge: null,
-  badgeClass: "",
-  accentColor: "border-border hover:border-primary/30",
-  buttonClass:
-    "border border-primary text-primary bg-primary/5 hover:bg-primary hover:text-primary-foreground font-semibold",
-  isFeatured: false,
-};
-
 export const photoUploadPlans = [
   {
     key: "dfy-upload-40",
@@ -309,18 +262,17 @@ export const photoUploadPlans = [
     discountedAmount: 1000,
     items: 40,
     perItem: "₹25 / dish",
-    tagline: "Upload up to 40 food dishes",
-    description: "Our experts format, optimize, and upload up to 40 food dish photos to your Zomato & Swiggy menus.",
+    description: "Upload & tag up to 40 food dish photos on your Zomato & Swiggy menus.",
     features: [
       "Upload & tag up to 40 food dishes",
       "Zomato & Swiggy platform resizing",
-      "Item-to-photo matching & categorization",
+      "Dish-to-photo matching & tagging",
       "100% platform approval guarantee",
-      "Turnaround in 24–48 hours",
+      "Completed within 24–48 hours",
     ],
-    button: "Order 40 Dishes Upload",
+    button: "Get 40 Items Upload",
     highlight: false,
-    badge: null,
+    badge: "Starter",
   },
   {
     key: "dfy-upload-80",
@@ -330,17 +282,16 @@ export const photoUploadPlans = [
     discountedAmount: 1500,
     items: 80,
     perItem: "₹18.75 / dish",
-    tagline: "Upload up to 80 food dishes",
-    description: "Best for busy restaurants & cafes with extensive multi-category menus.",
+    description: "Upload & tag up to 80 food dish photos on your Zomato & Swiggy menus.",
     features: [
       "Upload & tag up to 80 food dishes",
       "Zomato & Swiggy platform resizing",
-      "Item-to-photo matching & categorization",
+      "Dish-to-photo matching & tagging",
+      "Category & variant alignment",
       "100% platform approval guarantee",
-      "Priority Turnaround (24 hours)",
-      "1 free revision after upload",
+      "Priority Turnaround (24h)",
     ],
-    button: "Order 80 Dishes Upload",
+    button: "Get 80 Items Upload",
     highlight: true,
     badge: "⚡ Most Popular",
   },
@@ -352,18 +303,17 @@ export const photoUploadPlans = [
     discountedAmount: 2500,
     items: 150,
     perItem: "₹16.66 / dish",
-    tagline: "Upload up to 150 food dishes",
-    description: "Ideal for large menus, cloud kitchen chains, and multi-outlet food brands.",
+    description: "Upload & tag up to 150 food dishes across multi-outlets or large menus.",
     features: [
       "Upload & tag up to 150 food dishes",
       "Multi-outlet or large menu support",
       "Zomato & Swiggy platform resizing",
-      "Item-to-photo matching & categorization",
+      "Dish-to-photo matching & tagging",
       "100% platform approval guarantee",
       "Dedicated account specialist",
-      "Unlimited revisions for first week",
+      "Post-upload review & revision",
     ],
-    button: "Order 150 Dishes Upload",
+    button: "Get 150 Items Upload",
     highlight: false,
     badge: "⭐ Best Value",
   },
@@ -394,3 +344,66 @@ export const zomatoSwiggyPlans = [
     badge: "🚀 Full Store Setup",
   },
 ];
+
+export const PLAN_TIER_CONFIGS = {
+  basic: {
+    icon: Sparkles,
+    perImage: "₹19.96 / image",
+    tagline: "Great for expanding multi-cuisine restaurants",
+    badge: null,
+    badgeClass: "",
+    accentColor: "border-gray-200 hover:border-emerald-300",
+    buttonClass:
+      "border border-emerald-600 text-emerald-700 bg-emerald-50/60 hover:bg-emerald-600 hover:text-white font-semibold",
+    isFeatured: false,
+  },
+  pro: {
+    icon: Sparkles,
+    perImage: "₹12.49 / image",
+    tagline: "Best value for growing restaurants & food chains",
+    badge: null,
+    badgeClass: "",
+    accentColor: "border-gray-200 hover:border-emerald-300",
+    buttonClass:
+      "border border-emerald-600 text-emerald-700 bg-emerald-50/60 hover:bg-emerald-600 hover:text-white font-semibold",
+    isFeatured: false,
+  },
+  premium: {
+    icon: Crown,
+    perImage: "Unlimited Downloads",
+    tagline: "Unlimited access for agencies & restaurant groups",
+    badge: "⭐ Unlimited Access",
+    badgeClass:
+      "bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold shadow-md shadow-emerald-600/30",
+    accentColor:
+      "border-emerald-400 shadow-xl shadow-emerald-600/10 ring-2 ring-emerald-400/40 bg-gradient-to-b from-emerald-50/70 via-white to-white",
+    buttonClass:
+      "bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-600/20 font-semibold",
+    isFeatured: true,
+  },
+  yearly: {
+    icon: Crown,
+    perImage: "Unlimited Downloads",
+    tagline: "Unlimited access for a full year",
+    badge: "⭐ Unlimited Access",
+    badgeClass:
+      "bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold shadow-md shadow-emerald-600/30",
+    accentColor:
+      "border-emerald-400 shadow-xl shadow-emerald-600/10 ring-2 ring-emerald-400/40 bg-gradient-to-b from-emerald-50/70 via-white to-white",
+    buttonClass:
+      "bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-600/20 font-semibold",
+    isFeatured: true,
+  },
+};
+
+export const DEFAULT_PLAN_CONFIG = {
+  icon: Sparkles,
+  perImage: null,
+  tagline: "High quality food photography",
+  badge: null,
+  badgeClass: "",
+  accentColor: "border-gray-200 hover:border-emerald-300",
+  buttonClass:
+    "border border-emerald-600 text-emerald-700 bg-emerald-50/60 hover:bg-emerald-600 hover:text-white font-semibold",
+  isFeatured: false,
+};

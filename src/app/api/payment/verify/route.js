@@ -109,10 +109,23 @@ export async function POST(request) {
     }
 
     user.credits = (user.credits || 0) + creditsToAdd;
+    
+    // Extend expiry if currently active
+    const now = Date.now();
+    let currentExpiry = user.subscription?.expiresAt 
+      ? new Date(user.subscription.expiresAt).getTime() 
+      : now;
+      
+    if (currentExpiry < now || !user.subscription?.isActive) {
+      currentExpiry = now;
+    }
+
+    const newExpiry = new Date(currentExpiry + planDurationDays * 24 * 60 * 60 * 1000);
+
     user.subscription = {
       isActive: true,
       plan: planKey || user.subscription?.plan || "pro",
-      expiresAt: new Date(Date.now() + planDurationDays * 24 * 60 * 60 * 1000),
+      expiresAt: newExpiry,
       razorpayOrderId: razorpay_order_id,
       razorpayPaymentId: razorpay_payment_id,
     };

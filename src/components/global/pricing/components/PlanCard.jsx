@@ -74,7 +74,7 @@ export default function PlanCard({ plan, index }) {
               {includeUploadAddon ? displayTotal : plan.price}
             </span>
             <span className="text-xs text-muted-foreground font-medium">
-              / pack
+              / {plan.key === 'yearly' ? 'year' : 'month'}
             </span>
           </div>
           {config.perImage && (
