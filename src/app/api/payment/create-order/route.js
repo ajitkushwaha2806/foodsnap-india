@@ -38,7 +38,14 @@ export async function POST(request) {
         finalAmount = Number(tier.amount);
       }
       if (includeUploadAddon) {
-        finalAmount += 1000;
+        let addonPrice = 1000;
+        switch (planKey) {
+          case "starter": addonPrice = 499; break;
+          case "basic": addonPrice = 799; break;
+          case "pro": addonPrice = 1199; break;
+          case "premium": addonPrice = 1499; break;
+        }
+        finalAmount += addonPrice;
       }
       amountInPaise = Math.round(finalAmount * 100);
     } else if (customAmount && Number(customAmount) >= 1) {

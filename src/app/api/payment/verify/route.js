@@ -132,6 +132,13 @@ export async function POST(request) {
 
     await user.save();
     if (includeUploadAddon) {
+      let addonPrice = 1000;
+      switch (planKey) {
+        case "starter": addonPrice = 499; break;
+        case "basic": addonPrice = 799; break;
+        case "pro": addonPrice = 1199; break;
+        case "premium": addonPrice = 1499; break;
+      }
       await Ticket.create({
         user: user._id,
         status: "open",
@@ -140,8 +147,8 @@ export async function POST(request) {
           name: user.name || "Customer",
           phone: user.phone || "N/A",
           email: user.email || `${user.phone || "customer"}@foodsnap.in`,
-          subject: `[Photo Upload Add-on] ${planObj?.name || "Plan"} + Zomato/Swiggy Photo Upload (+₹1,000)`,
-          message: `Customer subscribed to ${planObj?.name || "Plan"} and paid +₹1,000 for Done-For-You Photo Upload Add-on. Razorpay Order: ${razorpay_order_id}, Payment: ${razorpay_payment_id}. Please contact customer to collect Zomato/Swiggy outlet access and upload their selected photos.`,
+          subject: `[Photo Upload Add-on] ${planObj?.name || "Plan"} + Zomato/Swiggy Photo Upload (+₹${addonPrice.toLocaleString("en-IN")})`,
+          message: `Customer subscribed to ${planObj?.name || "Plan"} and paid +₹${addonPrice.toLocaleString("en-IN")} for Done-For-You Photo Upload Add-on. Razorpay Order: ${razorpay_order_id}, Payment: ${razorpay_payment_id}. Please contact customer to collect Zomato/Swiggy outlet access and upload their selected photos.`,
         },
       });
     }

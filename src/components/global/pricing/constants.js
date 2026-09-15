@@ -2,6 +2,26 @@ import { Sparkles, Crown } from "lucide-react";
 
 export const plans = [
   {
+    key: "starter",
+    name: "Starter Plan",
+    price: "₹299",
+    description: "Download 10 high-quality food images.",
+    features: [
+      "10 image downloads",
+      "Zomato & Swiggy approved photos",
+      "High-quality images",
+    ],
+    button: "Get Starter Plan",
+    link: "/payment/cart?plan=starter",
+    highlight: false,
+    duration: 30,
+    amount: 299,
+    discountedAmount: 299,
+    discountPercentage: 0,
+    taxPercentage: 18,
+    downloads: 10,
+  },
+  {
     key: "basic",
     name: "Basic Plan",
     price: "₹499",
@@ -63,29 +83,6 @@ export const plans = [
     duration: 30,
     amount: 1999,
     discountedAmount: 1999,
-    discountPercentage: 0,
-    taxPercentage: 18,
-    downloads: "unlimited",
-  },
-  {
-    key: "yearly",
-    name: "Yearly Plan",
-    price: "₹2,999",
-    description: "Download unlimited high-quality food images for a year.",
-    features: [
-      "Unlimited image downloads",
-      "Full access to photo library",
-      "Zomato & Swiggy approved photos",
-      "Priority photo request handling",
-      "Exclusive new photo collections",
-      "High-quality images",
-    ],
-    button: "Get Yearly Plan",
-    link: "/payment/cart?plan=yearly",
-    highlight: true,
-    duration: 365,
-    amount: 2999,
-    discountedAmount: 2999,
     discountPercentage: 0,
     taxPercentage: 18,
     downloads: "unlimited",
@@ -346,6 +343,17 @@ export const zomatoSwiggyPlans = [
 ];
 
 export const PLAN_TIER_CONFIGS = {
+  starter: {
+    icon: Sparkles,
+    perImage: "₹29.90 / image",
+    tagline: "Perfect for getting started",
+    badge: null,
+    badgeClass: "",
+    accentColor: "border-gray-200 hover:border-emerald-300",
+    buttonClass:
+      "border border-emerald-600 text-emerald-700 bg-emerald-50/60 hover:bg-emerald-600 hover:text-white font-semibold",
+    isFeatured: false,
+  },
   basic: {
     icon: Sparkles,
     perImage: "₹19.96 / image",
@@ -372,19 +380,6 @@ export const PLAN_TIER_CONFIGS = {
     icon: Crown,
     perImage: "Unlimited Downloads",
     tagline: "Unlimited access for agencies & restaurant groups",
-    badge: "⭐ Unlimited Access",
-    badgeClass:
-      "bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold shadow-md shadow-emerald-600/30",
-    accentColor:
-      "border-emerald-400 shadow-xl shadow-emerald-600/10 ring-2 ring-emerald-400/40 bg-gradient-to-b from-emerald-50/70 via-white to-white",
-    buttonClass:
-      "bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-600/20 font-semibold",
-    isFeatured: true,
-  },
-  yearly: {
-    icon: Crown,
-    perImage: "Unlimited Downloads",
-    tagline: "Unlimited access for a full year",
     badge: "⭐ Unlimited Access",
     badgeClass:
       "bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold shadow-md shadow-emerald-600/30",

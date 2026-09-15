@@ -14,7 +14,18 @@ export default function PlanCard({ plan, index }) {
 
   const isCurrentPlanProcessing = isProcessing && activePlanKey === plan.key;
   const baseAmount = plan.discountedAmount || plan.amount || 499;
-  const totalAmount = includeUploadAddon ? baseAmount + 1000 : baseAmount;
+  const getAddonPrice = (planKey) => {
+    switch (planKey) {
+      case "starter": return 499;
+      case "basic": return 799;
+      case "pro": return 1199;
+      case "premium": return 1499;
+      default: return 1000;
+    }
+  };
+
+  const addonPrice = getAddonPrice(plan.key);
+  const totalAmount = includeUploadAddon ? baseAmount + addonPrice : baseAmount;
   const displayTotal = `₹${totalAmount.toLocaleString("en-IN")}`;
 
   const handleAddonToggle = (nextValue) => {
@@ -36,7 +47,7 @@ export default function PlanCard({ plan, index }) {
       key={plan.key || index}
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 260, damping: 20 }}
-      className={`relative flex flex-col justify-between rounded-3xl p-6 sm:p-7 border backdrop-blur-sm transition-all duration-300 ${config.accentColor} ${
+      className={`relative flex flex-col justify-between rounded-3xl p-4 sm:p-5 border backdrop-blur-sm transition-all duration-300 ${config.accentColor} ${
         config.isFeatured ? "bg-card shadow-lg" : "bg-card/70"
       }`}
     >
@@ -126,7 +137,7 @@ export default function PlanCard({ plan, index }) {
                   <span>Upload on my behalf</span>
                 </span>
                 <span className="text-[11px] font-bold text-primary px-2 py-0.5 rounded bg-primary/15 whitespace-nowrap">
-                  +₹1,000 / account
+                  +₹{addonPrice.toLocaleString("en-IN")} / account
                 </span>
               </div>
               <p className="text-[11px] text-muted-foreground mt-1 leading-snug">
