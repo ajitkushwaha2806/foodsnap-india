@@ -70,7 +70,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
     <TooltipProvider delayDuration={200}>
       <div className="cursor-pointer group">
         <div className="overflow-hidden border rounded-xl p-3 border-slate-200/80 bg-white dark:bg-card shadow-xs hover:shadow-md hover:border-slate-300 transition-all duration-300 hover:-translate-y-0.5">
-          <div className="relative rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900 shadow-2xs aspect-4/3">
+          <div className="relative rounded-lg overflow-hidden bg-slate-50 dark:bg-slate-900 shadow-2xs aspect-4/3 @container">
             {currentSrc && (
               <div className="absolute top-2.5 right-2.5 z-30 flex items-center gap-1.5">
                 <Tooltip>
@@ -127,20 +127,33 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
               </div>
             )}
 
-            <div className="absolute top-2.5 left-2.5 z-30 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-2.5 py-0.5 text-[10px] font-bold shadow-xs flex items-center gap-1">
-              <Sparkles size={11} />
+            <div className="absolute top-[2.5cqw] left-[2.5cqw] z-30 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-[2.5cqw] py-[0.5cqw] text-[clamp(10px,2.5cqw,18px)] font-bold shadow-xs flex items-center gap-[1cqw]">
+              <Sparkles className="w-[clamp(11px,2.8cqw,20px)] h-[clamp(11px,2.8cqw,20px)]" />
               <span>PREMIUM</span>
             </div>
 
             {currentSrc && (
-              <div className="absolute bottom-2.5 left-2.5 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/75 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium shadow-md select-none pointer-events-none">
-                <span className="relative flex h-1.5 w-1.5 shrink-0">
+              <div className="absolute bottom-[2.5cqw] left-[2.5cqw] z-20 flex items-center gap-[1.5cqw] px-[2.5cqw] py-[1cqw] rounded-full bg-slate-950/75 backdrop-blur-md border border-white/20 text-white text-[clamp(11px,2.8cqw,20px)] font-medium shadow-md select-none pointer-events-none">
+                <span className="relative flex h-[1.5cqw] w-[1.5cqw] min-h-[6px] min-w-[6px] shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400"></span>
+                  <span className="relative inline-flex rounded-full h-full w-full bg-emerald-400"></span>
                 </span>
                 <span className="tracking-tight leading-none text-white/95">
                   Approved on Zomato &amp; Swiggy
                 </span>
+              </div>
+            )}
+
+            {currentSrc && (
+              <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none select-none opacity-30 overflow-hidden">
+                <div className="flex flex-col items-center justify-center -rotate-12 px-[5cqw]">
+                  <span className="text-white text-[clamp(24px,12cqw,72px)] font-black tracking-widest uppercase drop-shadow-md leading-none text-center">
+                    FOODSNAP
+                  </span>
+                  <span className="text-white/80 text-[clamp(10px,3.5cqw,20px)] font-bold tracking-widest uppercase drop-shadow-sm mt-[1cqw] text-center">
+                    Protected Image
+                  </span>
+                </div>
               </div>
             )}
 
