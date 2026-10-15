@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import { ImageIcon, Download, MessageSquareWarning, Loader2, Sparkles } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export const ImageCard = ({ title = "", name = "", img = "", image_url = "", optimisedImg = "", optimised_image_url = "", imageId = "", premium = false }) => {
+export const ImageCard = ({ title = "", name = "", img = "", image_url = "", optimisedImg = "", optimised_image_url = "", imageId = "", premium = false, priority = false, deferImage = false, onImageSettled }) => {
   const { handleDownloadImage, handleReportImage } = useImage();
   const [isDownloading, setIsDownloading] = useState(false);
   const [isReporting, setIsReporting] = useState(false);
@@ -23,6 +23,7 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
   }, [rawOptimisedUrl, rawMasterUrl]);
 
   const handleImageError = () => {
+    onImageSettled?.();
     if (rawMasterUrl && currentSrc !== rawMasterUrl) {
       setCurrentSrc(rawMasterUrl);
     }
@@ -147,14 +148,18 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
 
 
             {currentSrc ? (
-              <img
-                src={currentSrc}
-                alt={displayTitle}
-                onError={handleImageError}
-                draggable={false}
-                className="w-full h-full object-cover object-center select-none pointer-events-auto touch-pan-y transition-transform duration-500 group-hover:scale-[1.03]"
-                loading="lazy"
-              />
+              !deferImage && (
+                <img
+                  src={currentSrc}
+                  alt={displayTitle}
+                  onLoad={onImageSettled}
+                  onError={handleImageError}
+                  draggable={false}
+                  className="w-full h-full object-cover object-center select-none pointer-events-auto touch-pan-y transition-transform duration-500 group-hover:scale-[1.03]"
+                  loading={priority ? "eager" : "lazy"}
+                  fetchPriority={priority ? "high" : "auto"}
+                />
+              )
             ) : (
               <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                 <ImageIcon className="text-slate-400 w-8 h-8" />
