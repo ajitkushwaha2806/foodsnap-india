@@ -148,16 +148,18 @@ export const ImageCard = ({ title = "", name = "", img = "", image_url = "", opt
 
 
             {currentSrc ? (
-              !deferImage && <img
-                src={currentSrc}
-                alt={displayTitle}
-                onLoad={onImageSettled}
-                onError={handleImageError}
-                draggable={false}
-                className="w-full h-full object-cover object-center select-none pointer-events-auto touch-pan-y transition-transform duration-500 group-hover:scale-[1.03]"
-                loading={priority ? "eager" : "lazy"}
-                fetchPriority={priority ? "high" : "auto"}
-              />
+              !deferImage && (
+                <img
+                  src={currentSrc}
+                  alt={displayTitle}
+                  onLoad={onImageSettled}
+                  onError={handleImageError}
+                  draggable={false}
+                  className="w-full h-full object-cover object-center select-none pointer-events-auto touch-pan-y transition-transform duration-500 group-hover:scale-[1.03]"
+                  loading={priority ? "eager" : "lazy"}
+                  fetchPriority={priority ? "high" : "auto"}
+                />
+              )
             ) : (
               <div className="w-full h-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                 <ImageIcon className="text-slate-400 w-8 h-8" />

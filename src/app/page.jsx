@@ -23,8 +23,9 @@ export default function Home() {
 
   const results = data?.pages?.flatMap((page) => page.results) || [];
   const lead = results[0];
+  const leadSrc = lead?.optimised_image_url || lead?.image_url;
   // Hold back the other images until the first one settles, so it does not share bandwidth with them.
-  const leadSettled = (!lead?.optimised_image_url && !lead?.image_url) || settledLeadId === lead?._id;
+  const leadSettled = !leadSrc || settledLeadId === lead._id;
   const totalCount = data?.pages?.[0]?.pagination?.total ?? results.length;
   const showEmpty = !isLoading && !isError && results.length === 0;
   const showResults = !isError && results.length > 0;
