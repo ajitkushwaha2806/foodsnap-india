@@ -1,6 +1,7 @@
 "use client";
 import { Loader2 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { preconnect } from "react-dom";
 import { useSearch } from "@/store/hooks/useSearch";
 import { Skeleton } from "@/components/ui/skeleton";
 import SearchBar from "@/components/search/search-bar";
@@ -9,14 +10,21 @@ import { useSearchQuery } from "@/hooks/useSearchQuery";
 import EmptyState from "@/components/global/EmptyState";
 import ServiceBannerCarousel from "@/components/home/ServiceBannerCarousel";
 
+const IMAGE_ORIGIN = "https://foodsnap-studio.s3.ap-southeast-2.amazonaws.com";
+
 export default function Home() {
+  preconnect(IMAGE_ORIGIN);
   const { query, searchTrigger } = useSearch();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error: queryError, refetch } = useSearchQuery(query, 12, searchTrigger);
 
   const loaderRef = useRef(null);
+  const [settledLeadId, setSettledLeadId] = useState(null);
 
   const results = data?.pages?.flatMap((page) => page.results) || [];
+  const lead = results[0];
+  // Hold back the other images until the first one settles, so it does not share bandwidth with them.
+  const leadSettled = (!lead?.optimised_image_url && !lead?.image_url) || settledLeadId === lead?._id;
   const totalCount = data?.pages?.[0]?.pagination?.total ?? results.length;
   const showEmpty = !isLoading && !isError && results.length === 0;
   const showResults = !isError && results.length > 0;
@@ -102,7 +110,7 @@ export default function Home() {
 
       {showResults && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-          {results.map((item) => (
+          {results.map((item, index) => (
             <ImageCard
               key={item._id}
               title={item.title || item.name}
@@ -110,6 +118,9 @@ export default function Home() {
               optimisedImg={item.optimised_image_url}
               imageId={item._id}
               premium={item.premium}
+              priority={index === 0}
+              deferImage={index > 0 && !leadSettled}
+              onImageSettled={index === 0 ? () => setSettledLeadId(item._id) : undefined}
             />
           ))}
         </div>
