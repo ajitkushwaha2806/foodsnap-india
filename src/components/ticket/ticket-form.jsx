@@ -12,6 +12,8 @@ import { Loader2, Mail, Phone, User, MessageSquare, Tag, CheckCircle2 } from "lu
 import posthog from "posthog-js";
 import { trackMetaEvent } from "@/lib/meta-pixel";
 
+const FIELD_ORDER = ["name", "phone", "email", "subject", "message"];
+
 export default function TicketForm() {
   const [loading, setLoading] = useState(false);
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
@@ -60,6 +62,25 @@ export default function TicketForm() {
     },
   });
 
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    formik.handleSubmit();
+
+    const errors = await formik.validateForm();
+    const invalidFields = FIELD_ORDER.filter((field) => errors[field]);
+    if (invalidFields.length === 0) return;
+
+    posthog.capture("support_ticket_submit_blocked", {
+      invalid_fields: invalidFields,
+      has_user_account: Boolean(user),
+    });
+    const firstInvalid = document.getElementById(invalidFields[0]);
+    firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
+    firstInvalid?.focus({ preventScroll: true });
+  };
+
+  const showSubmitError = formik.submitCount > 0 && !formik.isValid;
+
   return (
     <div className="w-full">
 
@@ -73,7 +94,7 @@ export default function TicketForm() {
             </div>
           )}
 
-          <form onSubmit={formik.handleSubmit} className="space-y-4">
+          <form onSubmit={handleFormSubmit} noValidate className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs font-medium text-foreground mb-1.5 block">
@@ -89,6 +110,7 @@ export default function TicketForm() {
                     value={formik.values.name}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    aria-invalid={Boolean(formik.touched.name && formik.errors.name)}
                   />
                 </div>
                 {formik.touched.name && formik.errors.name && (
@@ -112,6 +134,7 @@ export default function TicketForm() {
                     value={formik.values.phone}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    aria-invalid={Boolean(formik.touched.phone && formik.errors.phone)}
                   />
                 </div>
                 {formik.touched.phone && formik.errors.phone && (
@@ -137,6 +160,7 @@ export default function TicketForm() {
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  aria-invalid={Boolean(formik.touched.email && formik.errors.email)}
                 />
               </div>
               {formik.touched.email && formik.errors.email && (
@@ -160,6 +184,7 @@ export default function TicketForm() {
                   value={formik.values.subject}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  aria-invalid={Boolean(formik.touched.subject && formik.errors.subject)}
                 />
               </div>
               {formik.touched.subject && formik.errors.subject && (
@@ -184,6 +209,7 @@ export default function TicketForm() {
                   value={formik.values.message}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  aria-invalid={Boolean(formik.touched.message && formik.errors.message)}
                 />
               </div>
               {formik.touched.message && formik.errors.message && (
@@ -206,6 +232,11 @@ export default function TicketForm() {
                 "Submit Request"
               )}
             </Button>
+            {showSubmitError && (
+              <p role="alert" className="text-xs text-destructive text-center">
+                Please fill in the fields marked in red above.
+              </p>
+            )}
           </form>
         </CardContent>
       </Card>
